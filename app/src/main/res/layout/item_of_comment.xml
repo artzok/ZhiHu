@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_user_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@mipmap/account_avatar"/>
+
+    <LinearLayout
+        android:id="@+id/user_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/iv_user_image"
+        android:layout_toRightOf="@+id/iv_user_image"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:baselineAligned="true">
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text="为什么每次下雪我不在意的夜晚"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:contentDescription="@string/image_description"
+            android:src="@drawable/comment_vote_selector"/>
+
+        <TextView
+            android:id="@+id/tv_voted_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="top"
+            android:text="0"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <TextView
+        android:textColor="@color/primary_text"
+        android:id="@+id/tv_comment_count"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/user_info"
+        android:layout_alignStart="@id/user_info"
+        android:layout_below="@id/iv_user_image"
+        android:textSize="16sp"/>
+
+    <TextView
+        android:id="@+id/tv_comment_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_comment_count"
+        android:layout_below="@id/tv_comment_count"
+        android:layout_marginTop="20dp"
+        android:textSize="14sp"/>
+</RelativeLayout>

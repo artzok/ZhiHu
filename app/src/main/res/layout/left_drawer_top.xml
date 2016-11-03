@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="148dp"
+    android:layout_gravity="center_horizontal|top"
+    android:background="@color/colorPrimary"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="32dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_left_drawer_image"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@mipmap/account_avatar"/>
+
+    <TextView
+        android:id="@+id/tv_left_drawer_login_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_alignTop="@+id/iv_left_drawer_image"
+        android:layout_toRightOf="@+id/iv_left_drawer_image"
+        android:layout_toEndOf="@+id/iv_left_drawer_image"
+        android:gravity="center"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="@string/login_tip"
+        android:textColor="@color/plainFontColor"
+        android:textSize="16sp"/>
+
+    <LinearLayout
+        android:baselineAligned="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_left_drawer_favorites"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:contentDescription="@string/image_description"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@mipmap/favorites"/>
+
+            <TextView
+                android:id="@+id/tv_left_drawer_favorites_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/favorites_tip"
+                android:textColor="@color/plainFontColor"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_left_drawer_download"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:contentDescription="@string/image_description"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@mipmap/download"/>
+
+            <TextView
+                android:id="@+id/tv_left_drawer_download_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:text="@string/download_tip"
+                android:textColor="@color/plainFontColor"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

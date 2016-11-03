@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorStatus">#333333</color>
+
+    <color name="colorPrimary">#333333</color>
+    <color name="colorPrimaryDark">#282828</color>
+    <color name="colorAccent">#dc15a0</color>
+
+    <color name="plainFontColor">#999999</color>
+    <color name="itemFontColor">#ffffff</color>
+    <color name="itemBKSelectedColor">#202020</color>
+    <color name="itemBKPressedColor">#4d4c4c</color>
+    <color name="color_item_frame">#334d4c4c</color>
+    <color name="color_item_shadow">#222222</color>
+    <color name="color_item_solid">#334d4c4c</color>
+    <color name="black_bg">#d0000000</color>
+    <color name="primary_text">@android:color/darker_gray</color>
+</resources>

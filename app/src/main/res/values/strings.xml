@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">知乎</string>
+    <string name="action_night">夜间模式</string>
+    <string name="action_day">白天模式</string>
+    <string name="open_drawer_desc"/>
+    <string name="close_drawer_desc"/>
+    <string name="action_settings">设置选项</string>
+    <string name="action_messages">消息</string>
+    <string name="login_tip">请登录</string>
+    <string name="favorites_tip">我的收藏</string>
+    <string name="download_tip">离线下载</string>
+    <string name="menu_home_tip">首页</string>
+    <string name="load_failed">加载失败</string>
+    <string-array name="basic_permissions">
+        <item>android.permission.ACCESS_NETWORK_STATE</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_share">分享</string>
+    <string name="action_collect">收藏</string>
+    <string name="action_comment">评论</string>
+    <string name="action_praise">点赞</string>
+    <string name="image_description">这是一张图片</string>
+    <string name="action_write_comment">写评论</string>
+</resources>

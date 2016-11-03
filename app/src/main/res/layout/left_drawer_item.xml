@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingBottom="15dp"
+    android:paddingLeft="20dp"
+    android:paddingStart="20dp"
+    android:paddingRight="50dp"
+    android:paddingEnd="50dp"
+    android:paddingTop="15dp">
+
+    <TextView
+        android:id="@+id/tv_left_drawer_item_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="@color/itemFontColor"
+        android:textSize="16sp"/>
+
+    <ImageView
+        android:contentDescription="@string/image_description"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:src="@mipmap/menu_follow_highlight"/>
+</LinearLayout>

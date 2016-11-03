@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">@color/colorPrimary</item>
+        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
+    </style>
+
+    <style name="mainStyle" parent="AppTheme">
+        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">false</item>
+    </style>
+
+    <style name="TextAppearance.ExpandedTitle"
+           parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="toolBarText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="toolBarAction" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorControlNormal">#ffffff</item>
+    </style>
+</resources>
