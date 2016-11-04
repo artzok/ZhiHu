@@ -13,6 +13,12 @@
     <string name="load_failed">加载失败</string>
     <string-array name="basic_permissions">
         <item>android.permission.ACCESS_NETWORK_STATE</item>
+        <item>android.permission.READ_PHONE_STATE</item>
+        <item>android.permission.WRITE_EXTERNAL_STORAGE</item>
+    </string-array>
+    <string-array name="main_permissions">
+        <item>android.permission.ACCESS_WIFI_STATE</item>
+        <item>android.permission.ACCESS_NETWORK_STATE</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

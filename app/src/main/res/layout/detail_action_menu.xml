@@ -39,10 +39,10 @@
         android:id="@+id/comment_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:textColor="@color/plainFontColor"
-        android:textSize="16sp"/>
+        android:textSize="12sp"/>
 
     <ImageView
         android:id="@+id/menu_praise"
@@ -55,8 +55,8 @@
         android:id="@+id/praise_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:textColor="@color/plainFontColor"
-        android:textSize="16sp"/>
+        android:textSize="12sp"/>
 </LinearLayout>

@@ -66,5 +66,5 @@
         android:layout_alignLeft="@id/tv_comment_count"
         android:layout_below="@id/tv_comment_count"
         android:layout_marginTop="20dp"
-        android:textSize="14sp"/>
+        android:textSize="12sp"/>
 </RelativeLayout>

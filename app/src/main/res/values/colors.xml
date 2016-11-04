@@ -14,4 +14,5 @@
     <color name="color_item_solid">#33eeeeee</color>
     <color name="black_bg">#d0000000</color>
     <color name="primary_text">@android:color/darker_gray</color>
+    <color name="comment_divider_color">#aaa</color>
 </resources>

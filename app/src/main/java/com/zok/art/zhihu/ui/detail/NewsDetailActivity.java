@@ -1,7 +1,6 @@
 package com.zok.art.zhihu.ui.detail;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
@@ -9,15 +8,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.base.BaseActivity;
 import com.zok.art.zhihu.bean.NewsExtraBean;
@@ -73,10 +72,11 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContract.Presente
     protected TextView mPraiseCount;
     @BindView(R.id.tv_toolbar_title)
     protected TextView mToolBarTitle;
+    private int scrollDis = 0;
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_news_detail;
+        return R.layout.activity_detail;
     }
 
     @Override
@@ -88,7 +88,6 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContract.Presente
     protected void initInject() {
         getActivityComponent().inject(this);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -129,6 +128,14 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContract.Presente
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setAllowContentAccess(true);
+        settings.setBuiltInZoomControls(true);
+        settings.setLayoutAlgorithm(com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        mWebView.setDayOrNight(!isNightMode());
+    }
+
+    // 设置相关监听器
+    private void setListener() {
+        // set webView Client
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -144,6 +151,7 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContract.Presente
             }
         });
 
+        // set webView chrome client
         mWebView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -152,16 +160,26 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContract.Presente
                     mLoadProgressBar.setProgress(newProgress);
             }
         });
-    }
 
-    // 设置相关监听器
-    private void setListener() {
+
         // ToolBar渐变效果
-        mNestedScrollView.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        mNestedScrollView.setOnScrollChangeListener(
+                new NestedScrollView.OnScrollChangeListener() {
             @Override
             public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                float rate = scrollY * 1.0f / v.getHeight();
-                mToolbar.setAlpha(rate * 255);
+                int height = mHeadImage.getHeight();
+                scrollDis += scrollY - oldScrollY;
+                float rate = scrollDis * 1.0f / height;
+                mToolbar.setAlpha(rate);
+                // hide title
+                if (rate >= 0)
+                    mBigTitle.setVisibility(View.INVISIBLE);
+                else if (rate < 0) {
+                    mBigTitle.setVisibility(View.VISIBLE);
+                }
+
+                scrollDis = scrollDis < 0 ? 0 : scrollDis;
+                scrollDis = scrollDis > height ? height : scrollDis;
             }
         });
 
@@ -177,6 +195,10 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContract.Presente
 
     @Override
     public void onBackPressed() {
+        if (mWebView.canGoBack()) {
+            mWebView.goBack();
+            return;
+        }
         super.onBackPressed();
         overridePendingTransition(R.anim.trans_enter_anim, R.anim.trans_exit_anim);
     }
@@ -230,8 +252,9 @@ public class NewsDetailActivity extends BaseActivity<NewsDetailContract.Presente
 
     @Override
     public void updateTitle(String title) {
-        mBigTitle.setText(title);
+        mCollapsing.setTitle(title);
         mToolBarTitle.setText(title);
+        mBigTitle.setText(title);
     }
 
     public void updateCopyRight(String copyright) {

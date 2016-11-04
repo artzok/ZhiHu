@@ -1,9 +1,10 @@
 package com.zok.art.zhihu.adapter;
 
+import android.animation.Animator;
 import android.content.Context;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,19 +13,16 @@ import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.bean.CommentBean;
 import com.zok.art.zhihu.utils.DateUtil;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * @author 赵坤
  * @email artzok@163.com
  */
-public class CommentAdapter extends BaseListAdapter<CommentBean> {
+public class CommentAdapter extends BaseListAdapter<CommentBean> implements Animator.AnimatorListener {
     public static final int ITEM_TYPE_LONG = 1;         // flag for long comment title
     public static final int ITEM_TYPE_SHORT = 2;        // flag for short comment title
 
@@ -33,8 +31,11 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
     private OtherViewHolder longHolder; // long comment holder
     private OtherViewHolder shortHolder;// short comment holder
 
+    private boolean isFinish;
+
     public CommentAdapter(Context context) {
         super(context);
+        isFinish = true;
     }
 
     public int getLongCount() {
@@ -52,7 +53,7 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
     @Override
     protected int getItemLayoutId(int itemViewType) {
         if (itemViewType == ITEM_TYPE_NORMAL) {
-            return R.layout.item_of_comment;
+            return R.layout.comment_item;
         } else {
             return R.layout.comment_title;
         }
@@ -92,7 +93,31 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
     }
 
     public void animate() {
-        shortHolder.mFold.animate().rotationBy(180).start();
+        ViewPropertyAnimator animator = shortHolder.mFold.animate().rotationBy(180);
+        animator.setListener(this);
+        animator.start();
+    }
+
+    public boolean isFinishOfAnimation() {
+        return isFinish;
+    }
+
+    @Override
+    public void onAnimationStart(Animator animation) {
+        isFinish = false;
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animation) {
+        isFinish = true;
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animation) {
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animation) {
     }
 
     class NormalViewHolder extends BaseViewHolder {
@@ -155,6 +180,7 @@ public class CommentAdapter extends BaseListAdapter<CommentBean> {
                 mTitle.setText(String.format(Locale.CHINA, "%d条长评", longCount));
             } else if (type == ITEM_TYPE_SHORT) {       // no action more
                 mTitle.setText(String.format(Locale.CHINA, "%d条短评", shortCount));
+                Log.d("tag", mTitle.toString());
             }
         }
     }

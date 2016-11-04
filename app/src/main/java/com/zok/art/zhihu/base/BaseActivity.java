@@ -1,12 +1,18 @@
 package com.zok.art.zhihu.base;
 
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Telephony;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.zok.art.zhihu.R;
@@ -71,19 +77,17 @@ public abstract class BaseActivity<T extends BasePresenter>
         mUnBinder = ButterKnife.bind(this);
     }
 
-
     protected abstract int getLayoutResId();
 
     protected abstract void initInject();
 
     protected ActivityComponent getActivityComponent() {
-        return DaggerActivityComponent.builder()
-                .activityModule(new ActivityModule(this, getIntent()))
-                .build();
+        return DaggerActivityComponent.builder().activityModule(
+                new ActivityModule(this, getIntent())).build();
     }
 
     private void requestPermissions() {
-        String[] permissions = AppUtil.getStrArr(getPermissionArrId());
+       final String[] permissions = AppUtil.getStrArr(getPermissionArrId());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean result = true;
             for (String permission : permissions) {
@@ -95,7 +99,12 @@ public abstract class BaseActivity<T extends BasePresenter>
             if (result) {
                 requestPermissionSucceed();
             } else {
-                requestPermissions(permissions, 0);
+                new Handler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ActivityCompat.requestPermissions(BaseActivity.this, permissions, 0);
+                    }
+                });
             }
         } else {
             requestPermissionSucceed();
@@ -105,12 +114,17 @@ public abstract class BaseActivity<T extends BasePresenter>
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         List<String> failed = new ArrayList<>();
+        // check permission and add filed item
         for (int i = 0; i < permissions.length; i++) {
             if (grantResults[i] != GRAND)
                 failed.add(permissions[i]);
         }
-        if (!failed.isEmpty())
+        // notify subclass request failed
+        if (!failed.isEmpty()) {
             requestPermissionFailed(failed);
+            return;
+        }
+        requestPermissionSucceed();
     }
 
     /**
@@ -123,6 +137,7 @@ public abstract class BaseActivity<T extends BasePresenter>
      */
     protected void requestPermissionFailed(List<String> failedPermissions) {
         ToastUtil.show(this, failedPermissions.toString());
+        finish();
     }
 
     /**

@@ -3,19 +3,13 @@ package com.zok.art.zhihu.adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.support.v4.view.PagerAdapter;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.bean.TopStoryBean;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author 赵坤
@@ -29,7 +23,7 @@ public class HomePageBannerAdapter extends BasePageAdapter<TopStoryBean> {
 
     @Override
     protected int getItemLayoutId() {
-        return R.layout.home_page_banner_item;
+        return R.layout.home_page_banner;
     }
 
     @Override

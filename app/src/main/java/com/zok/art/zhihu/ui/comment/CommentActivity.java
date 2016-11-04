@@ -1,6 +1,8 @@
 package com.zok.art.zhihu.ui.comment;
 
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -114,7 +116,7 @@ public class CommentActivity extends BaseActivity<CommentContract.Presenter>
         mCommentsList.post(new Runnable() {
             @Override
             public void run() {
-                mCommentsList.smoothScrollToPositionFromTop(mCommentAdapter.getLongCount() + 1,0);
+                mCommentsList.smoothScrollToPositionFromTop(mCommentAdapter.getLongCount() + 1, 0, 500);
             }
         });
     }
@@ -137,9 +139,16 @@ public class CommentActivity extends BaseActivity<CommentContract.Presenter>
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            if (mCommentsList.isInLayout())
+                return;
+        }
+
         if (mCommentAdapter.getItemViewType(position) == CommentAdapter.ITEM_TYPE_SHORT) {
-            mPresenter.loadOrDeleteShortComment();
-            mCommentAdapter.animate();
+            if (mCommentAdapter.isFinishOfAnimation()) {
+                mPresenter.loadOrDeleteShortComment();
+                mCommentAdapter.animate();
+            }
         }
     }
 }

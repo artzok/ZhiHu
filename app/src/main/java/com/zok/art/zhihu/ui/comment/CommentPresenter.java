@@ -3,11 +3,13 @@ package com.zok.art.zhihu.ui.comment;
 import android.content.Intent;
 import android.widget.ListView;
 
+import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.api.ApiManager;
 import com.zok.art.zhihu.api.ApiService;
 import com.zok.art.zhihu.bean.CommentBean;
 import com.zok.art.zhihu.bean.CommentsBean;
 import com.zok.art.zhihu.bean.NewsExtraBean;
+import com.zok.art.zhihu.utils.AppUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +78,11 @@ public class CommentPresenter implements CommentContract.Presenter {
             public void call(List<CommentBean> commentBeen) {
                 concat(LONG_TYPE, commentBeen);
             }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                mView.showError(AppUtil.getString(R.string.load_failed), throwable);
+            }
         });
     }
 
@@ -99,6 +106,11 @@ public class CommentPresenter implements CommentContract.Presenter {
                 concat(SHORT_TYPE, commentBeen);
                 hasLoad = true;
             }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                mView.showError(AppUtil.getString(R.string.load_failed), throwable);
+            }
         });
     }
 
@@ -113,7 +125,7 @@ public class CommentPresenter implements CommentContract.Presenter {
             mComments.add(new CommentBean());
         } else if (commentType == SHORT_TYPE) {
             if (comments != null)
-            mComments.addAll(comments);
+                mComments.addAll(comments);
         }
 
         // 更新评论数量

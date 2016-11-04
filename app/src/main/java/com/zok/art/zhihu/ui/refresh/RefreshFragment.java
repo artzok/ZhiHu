@@ -105,6 +105,8 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
         super.onResume();
         if (mPresenter != null)
             mPresenter.resume();
+        //mNewsListView.smoothScrollToPositionFromTop(0, 0, 200);
+        mNewsListView.setSelection(0);
     }
 
     @Override

@@ -76,6 +76,12 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
 
     @Override
     protected void requestImmersion() {
+        // 禁用沉浸式
+    }
+
+    @Override
+    protected int getPermissionArrId() {
+        return R.array.main_permissions;
     }
 
     @Override
