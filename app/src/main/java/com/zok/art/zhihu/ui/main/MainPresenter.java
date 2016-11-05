@@ -7,16 +7,20 @@ import android.util.SparseArray;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.api.ApiManager;
 import com.zok.art.zhihu.api.ApiService;
-import com.zok.art.zhihu.bean.ThemeBean;
-import com.zok.art.zhihu.bean.ThemesBean;
-import com.zok.art.zhihu.ui.homepage.HomePageFragment;
-import com.zok.art.zhihu.ui.themes.ThemePageFragment;
+import com.zok.art.zhihu.bean.SectionBean;
+import com.zok.art.zhihu.bean.SectionListBean;
+import com.zok.art.zhihu.bean.ThemeItemBean;
+import com.zok.art.zhihu.bean.ThemeListBean;
+import com.zok.art.zhihu.ui.home.HomeFragment;
+import com.zok.art.zhihu.ui.themes.ThemeFragment;
 import com.zok.art.zhihu.utils.AppUtil;
 
 import java.util.List;
 
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import static com.zok.art.zhihu.ui.main.MainContract.Presenter;
@@ -28,10 +32,10 @@ import static com.zok.art.zhihu.ui.main.MainContract.View;
  */
 public class MainPresenter implements Presenter {
 
-    private View mMainView;
+    private View mView;
     private ApiService mService;
-    private List<ThemeBean> mThemeBeans;
     private Fragment mHomePageFragment;
+    private List<ThemeItemBean> mThemeItemBeen;
     private SparseArray<Fragment> mThemeFragments;
 
     public MainPresenter() {
@@ -40,50 +44,47 @@ public class MainPresenter implements Presenter {
 
     public MainPresenter(Intent intent) {
         mService = ApiManager.getApiService();
-        mHomePageFragment = HomePageFragment.newInstance();
+        mHomePageFragment = HomeFragment.newInstance();
         mThemeFragments = new SparseArray<>();
 
     }
 
     @Override
     public void attachView(View view) {
-        this.mMainView = view;
+        this.mView = view;
     }
 
     @Override
     public void detachView() {
-        mMainView = null;
+        mView = null;
     }
 
     @Override
     public void start() {
-        // 初始化导航列表
         loadThemes();
-//        // go to home page
-//        changedHome();
     }
 
     @Override
-    public void changedTheme(int position) {
+    public void switchTheme(int position) {
         // update theme title
-        ThemeBean bean = mThemeBeans.get(position);
-        mMainView.updateActionBarTitle(bean.getName());
+        ThemeItemBean bean = mThemeItemBeen.get(position);
+        mView.updateTitle(bean.getName());
         // fragment trans
-        mMainView.replaceFragment(getThemeFragment(position));
+        mView.replaceFragment(getThemeFragment(position));
     }
 
     @Override
-    public void changedHome() {
+    public void switchHome() {
         // update title
-        mMainView.updateActionBarTitle(AppUtil.getString(R.string.menu_home_tip));
+        mView.updateTitle(AppUtil.getString(R.string.menu_home_tip));
         // fragment trans
-        mMainView.replaceFragment(mHomePageFragment);
+        mView.replaceFragment(mHomePageFragment);
     }
 
     private Fragment getThemeFragment(int i) {
         Fragment fragment = mThemeFragments.get(i);
         if (fragment == null) {
-            fragment = ThemePageFragment.newInstance(mThemeBeans.get(i));
+            fragment = ThemeFragment.newInstance(mThemeItemBeen.get(i));
             mThemeFragments.put(i, fragment);
         }
         return fragment;
@@ -93,18 +94,18 @@ public class MainPresenter implements Presenter {
         mService.newestThemes()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ThemesBean>() {
+                .subscribe(new Action1<ThemeListBean>() {
                     @Override
-                    public void call(ThemesBean themesBean) {
-                        mThemeBeans = themesBean.getOthers();
-                        if (mMainView != null)
-                            mMainView.updateThemeList(mThemeBeans);
+                    public void call(ThemeListBean themeListBean) {
+                        mThemeItemBeen = themeListBean.getOthers();
+                        if (mView != null)
+                            mView.updateThemeList(mThemeItemBeen);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
-                        if (mMainView != null)
-                            mMainView.showError("Load themes error!", throwable);
+                        if (mView != null)
+                            mView.showError("Load themes error!", throwable);
                     }
                 });
     }

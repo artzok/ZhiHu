@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">知乎</string>
     <string name="action_night">夜间模式</string>
-    <string name="action_day">白天模式</string>
+    <string name="action_day">日间模式</string>
     <string name="open_drawer_desc"/>
     <string name="close_drawer_desc"/>
     <string name="action_settings">设置选项</string>
@@ -21,12 +21,12 @@
         <item>android.permission.ACCESS_NETWORK_STATE</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_share">分享</string>
     <string name="action_collect">收藏</string>
     <string name="action_comment">评论</string>
     <string name="action_praise">点赞</string>
     <string name="image_description">这是一张图片</string>
     <string name="action_write_comment">写评论</string>
+    <string name="empty_description">空空如也\n赶紧去收藏吧</string>
+    <string name="sections">旧版栏目</string>
 </resources>

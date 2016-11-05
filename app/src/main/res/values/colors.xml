@@ -7,12 +7,9 @@
 
     <color name="plainFontColor">#ffffff</color>
     <color name="itemFontColor">#000000</color>
-    <color name="itemBKSelectedColor">#eeeeee</color>
-    <color name="itemBKPressedColor">#a1a1a1</color>
-    <color name="color_item_frame">#ffeeeeee</color>
-    <color name="color_item_shadow">#bbb</color>
-    <color name="color_item_solid">#33eeeeee</color>
+
     <color name="black_bg">#d0000000</color>
     <color name="primary_text">@android:color/darker_gray</color>
     <color name="comment_divider_color">#aaa</color>
+    <color name="light_grey">#D7D7D7</color>
 </resources>

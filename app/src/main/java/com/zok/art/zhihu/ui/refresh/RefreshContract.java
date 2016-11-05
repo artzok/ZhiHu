@@ -2,7 +2,8 @@ package com.zok.art.zhihu.ui.refresh;
 
 import com.zok.art.zhihu.base.BasePresenter;
 import com.zok.art.zhihu.base.BaseView;
-import com.zok.art.zhihu.bean.ListStoryBean;
+import com.zok.art.zhihu.bean.BasicStoryBean;
+import com.zok.art.zhihu.bean.StoryListItemBean;
 
 import java.util.List;
 
@@ -17,9 +18,9 @@ public interface RefreshContract {
 
         void closeRefreshUI();
 
-        void updateHeaderView(M mode);
+        void updateBanner(M mode);
 
-        void updateNewsList(List<ListStoryBean> bean);
+        void updateNewsList(List<StoryListItemBean> bean);
     }
 
     interface Presenter<M, V extends View<M>> extends BasePresenter<V> {
@@ -31,10 +32,10 @@ public interface RefreshContract {
 
         void updateBefore();
 
-        List<ListStoryBean> getListBeans(M mode);
+        List<StoryListItemBean> getListBeans(M mode);
 
         String getTitle();
 
-        void setReadState(ListStoryBean bean);
+        void setReadState(StoryListItemBean bean);
     }
 }

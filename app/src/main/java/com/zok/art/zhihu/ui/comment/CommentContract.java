@@ -2,7 +2,7 @@ package com.zok.art.zhihu.ui.comment;
 
 import com.zok.art.zhihu.base.BasePresenter;
 import com.zok.art.zhihu.base.BaseView;
-import com.zok.art.zhihu.bean.CommentBean;
+import com.zok.art.zhihu.bean.CommentItemBean;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface CommentContract {
     interface View extends BaseView {
         void updateTitle(String title);
 
-        void updateLongComment(int longCount, int shortCount, List<CommentBean> comments);
+        void updateLongComment(int longCount, int shortCount, List<CommentItemBean> comments);
 
         void showProgressBar();
 

@@ -22,20 +22,30 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.main.MainActivity"
             android:configChanges="uiMode"
             android:launchMode="singleTask">
         </activity>
+
         <activity
-            android:name=".ui.detail.NewsDetailActivity"
+            android:name=".ui.detail.DetailActivity"
             android:launchMode="singleTop"/>
+
         <activity
             android:name=".ui.comment.CommentActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.collected.CollectedActivity"
+            android:launchMode="singleTop"/>
+
+        <activity
+            android:name=".ui.sections.SectionsActivity"
             android:launchMode="singleTop"/>
     </application>
 

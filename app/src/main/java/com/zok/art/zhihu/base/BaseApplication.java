@@ -35,34 +35,15 @@ public class BaseApplication extends Application {
 
     private void initTbs() {
         final QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
-            @Override
-            public void onViewInitFinished(boolean arg0) {
-            }
-
-            @Override
-            public void onCoreInitFinished() {
-            }
+            public void onViewInitFinished(boolean arg0) {}
+            public void onCoreInitFinished() {}
         };
         QbSdk.setTbsListener(new TbsListener() {
-            @Override
-            public void onDownloadFinish(int i) {
-            }
-
-            @Override
-            public void onInstallFinish(int i) {
-            }
-
-            @Override
-            public void onDownloadProgress(int i) {
-            }
+            public void onDownloadFinish(int i) {}
+            public void onInstallFinish(int i) {}
+            public void onDownloadProgress(int i) {}
         });
-
-        new Thread() {
-            @Override
-            public void run() {
-                QbSdk.initX5Environment(getApplicationContext(),  cb);
-                QbSdk.preInit(getApplicationContext());
-            }
-        }.start();
+        QbSdk.initX5Environment(getApplicationContext(),  cb);
+        QbSdk.preInit(getApplicationContext());
     }
 }

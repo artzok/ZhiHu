@@ -126,7 +126,7 @@ public class NewsDetailBean implements ITitleBean {
         return "NewsDetailBean{" +
                 "mHtmlBody='" + mHtmlBody + '\'' +
                 ", mImageAuthor='" + mImageAuthor + '\'' +
-                ", mBigTitle='" + mTitle + '\'' +
+                ", mHeadline='" + mTitle + '\'' +
                 ", mLagerImageUrl='" + mLagerImageUrl + '\'' +
                 ", mShareUrl='" + mShareUrl + '\'' +
                 ", mGaPrefix='" + mGaPrefix + '\'' +

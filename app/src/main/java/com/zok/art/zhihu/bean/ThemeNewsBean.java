@@ -13,8 +13,8 @@ public class ThemeNewsBean {
     private String image;
     private String image_source;
     private String name;
-    private List<EditorsBean> editors;
-    private List<ListStoryBean> stories;
+    private List<EditorBean> editors;
+    private List<StoryListItemBean> stories;
 
     public String getBackground() {
         return background;
@@ -64,19 +64,19 @@ public class ThemeNewsBean {
         this.name = name;
     }
 
-    public List<EditorsBean> getEditors() {
+    public List<EditorBean> getEditors() {
         return editors;
     }
 
-    public void setEditors(List<EditorsBean> editors) {
+    public void setEditors(List<EditorBean> editors) {
         this.editors = editors;
     }
 
-    public List<ListStoryBean> getStories() {
+    public List<StoryListItemBean> getStories() {
         return stories;
     }
 
-    public void setStories(List<ListStoryBean> stories) {
+    public void setStories(List<StoryListItemBean> stories) {
         this.stories = stories;
     }
 

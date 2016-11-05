@@ -1,8 +1,7 @@
-1. 使用popWindow替换menu
-2. 使用Crosswalk替换WebView
+使用popWindow替换menu
+使用Crosswalk替换WebView
 3. 自定义toast
 4. 评论操作对话框
 5. snack bar工具方法
 6. 集成Tinker的exception handle
-7. 优化代码
-8. 同步导航选中状态
+同步导航选中状态

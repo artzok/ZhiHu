@@ -2,7 +2,6 @@ package com.zok.art.zhihu.ui.comment;
 
 import android.graphics.Color;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,9 +12,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.zok.art.zhihu.R;
-import com.zok.art.zhihu.adapter.CommentAdapter;
+import com.zok.art.zhihu.adapter.CommentListAdapter;
 import com.zok.art.zhihu.base.BaseActivity;
-import com.zok.art.zhihu.bean.CommentBean;
+import com.zok.art.zhihu.bean.CommentItemBean;
 import com.zok.art.zhihu.utils.ToastUtil;
 
 import java.util.List;
@@ -40,7 +39,7 @@ public class CommentActivity extends BaseActivity<CommentContract.Presenter>
     @BindView(R.id.load_progress_bar)
     protected ProgressBar mLoadProgress;
 
-    private CommentAdapter mCommentAdapter;
+    private CommentListAdapter mCommentListAdapter;
 
     @Override
     protected int getLayoutResId() {
@@ -70,8 +69,8 @@ public class CommentActivity extends BaseActivity<CommentContract.Presenter>
     }
 
     private void initAdapter() {
-        mCommentAdapter = new CommentAdapter(this);
-        mCommentsList.setAdapter(mCommentAdapter);
+        mCommentListAdapter = new CommentListAdapter(this);
+        mCommentsList.setAdapter(mCommentListAdapter);
     }
 
 
@@ -109,14 +108,14 @@ public class CommentActivity extends BaseActivity<CommentContract.Presenter>
     }
 
     @Override
-    public void updateLongComment(int longCount, int shortCount, List<CommentBean> comments) {
-        mCommentAdapter.setLongCount(longCount);
-        mCommentAdapter.setShortCount(shortCount);
-        mCommentAdapter.setDataAndRefresh(comments);
+    public void updateLongComment(int longCount, int shortCount, List<CommentItemBean> comments) {
+        mCommentListAdapter.setLongCount(longCount);
+        mCommentListAdapter.setShortCount(shortCount);
+        mCommentListAdapter.setDataAndRefresh(comments);
         mCommentsList.post(new Runnable() {
             @Override
             public void run() {
-                mCommentsList.smoothScrollToPositionFromTop(mCommentAdapter.getLongCount() + 1, 0, 500);
+                mCommentsList.smoothScrollToPositionFromTop(mCommentListAdapter.getLongCount() + 1, 0, 500);
             }
         });
     }
@@ -144,10 +143,10 @@ public class CommentActivity extends BaseActivity<CommentContract.Presenter>
                 return;
         }
 
-        if (mCommentAdapter.getItemViewType(position) == CommentAdapter.ITEM_TYPE_SHORT) {
-            if (mCommentAdapter.isFinishOfAnimation()) {
+        if (mCommentListAdapter.getItemViewType(position) == CommentListAdapter.ITEM_TYPE_SHORT) {
+            if (mCommentListAdapter.isFinishOfAnimation()) {
                 mPresenter.loadOrDeleteShortComment();
-                mCommentAdapter.animate();
+                mCommentListAdapter.animate();
             }
         }
     }

@@ -11,10 +11,11 @@ import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.adapter.NewsListAdapter;
 import com.zok.art.zhihu.base.BaseApplication;
 import com.zok.art.zhihu.base.BaseFragment;
-import com.zok.art.zhihu.bean.ListStoryBean;
+import com.zok.art.zhihu.bean.BasicStoryBean;
+import com.zok.art.zhihu.bean.StoryListItemBean;
 import com.zok.art.zhihu.config.Constants;
+import com.zok.art.zhihu.ui.detail.DetailActivity;
 import com.zok.art.zhihu.ui.main.MainActivity;
-import com.zok.art.zhihu.ui.detail.NewsDetailActivity;
 import com.zok.art.zhihu.utils.ToastUtil;
 
 import java.util.List;
@@ -81,7 +82,7 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
     protected abstract void initHeaderView(View headerView);
 
     @Override
-    public void updateNewsList(List<ListStoryBean> bean) {
+    public void updateNewsList(List<StoryListItemBean> bean) {
         mNewsAdapter.setDataAndRefresh(bean);
     }
 
@@ -139,12 +140,12 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
 
         // modify action bar title
         int firstVisiblePosition = mNewsListView.getFirstVisiblePosition();
-        ListStoryBean bean = (ListStoryBean) mNewsAdapter.getItem(firstVisiblePosition);
+        StoryListItemBean bean = (StoryListItemBean) mNewsAdapter.getItem(firstVisiblePosition);
         MainActivity activity = (MainActivity) getActivity();
         if (bean.isDate()) {
-            activity.updateActionBarTitle(bean.getDateString());
+            activity.updateTitle(bean.getDateString());
         } else if (firstVisibleItem == 0) {
-            activity.updateActionBarTitle(mPresenter.getTitle());
+            activity.updateTitle(mPresenter.getTitle());
         }
 
     }
@@ -161,7 +162,7 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
         }
 
         // click item
-        ListStoryBean item = (ListStoryBean) mNewsAdapter.getItem(position - count);
+        StoryListItemBean item = (StoryListItemBean) mNewsAdapter.getItem(position - count);
         // filter decorate item
         if (!item.isDate() && !item.isTitle()) {
             // mark unread news
@@ -171,16 +172,16 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
                 mNewsAdapter.notifyDataSetChanged();
             }
             // go to detail activity
-            startDetailActivity(item.getId());
+            startDetailActivity(item);
         }
     }
 
     protected void onHeaderClick() {
     }
 
-    protected void startDetailActivity(long id) {
-        Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
-        intent.putExtra(Constants.EXTRA_INIT_PARAMS, id);
+    protected void startDetailActivity(StoryListItemBean bean) {
+        Intent intent = new Intent(getActivity(), DetailActivity.class);
+        intent.putExtra(Constants.EXTRA_INIT_PARAMS, bean);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.trans_enter_anim, R.anim.trans_exit_anim);
     }

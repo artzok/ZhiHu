@@ -1,12 +1,14 @@
 package com.zok.art.zhihu.ui.refresh;
 
 import android.os.Bundle;
+import android.os.Looper;
 
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.api.ApiManager;
 import com.zok.art.zhihu.api.ApiService;
-import com.zok.art.zhihu.bean.BeforeStoryBean;
-import com.zok.art.zhihu.bean.ListStoryBean;
+import com.zok.art.zhihu.bean.BasicStoryBean;
+import com.zok.art.zhihu.bean.StoriesBeforeBean;
+import com.zok.art.zhihu.bean.StoryListItemBean;
 import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.db.RealmManager;
 import com.zok.art.zhihu.utils.AppUtil;
@@ -35,7 +37,7 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
 
     // latest data and list
     protected M mLatestData;
-    private List<ListStoryBean> mListNewsData;
+    private List<StoryListItemBean> mListNewsData;
 
     // URL API Service
     private ApiService mApiService;
@@ -124,7 +126,7 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
                         mLatestData = m;
                         mListNewsData = getListBeans(mLatestData);
                         mListNewsData.add(0, getTitleItem());
-                        mView.updateHeaderView(mLatestData);
+                        mView.updateBanner(mLatestData);
                         mView.updateNewsList(mListNewsData);
                     }
                 }, new Action1<Throwable>() {
@@ -144,25 +146,25 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
     private void LoadBeforeData() {
         mDate = DateUtil.getBeforeDate(mDate);
         String date = DateUtil.formatDate(mDate, "yyyyMMdd");
-        Observable<BeforeStoryBean> observable = mApiService.beforeNews(date);
+        Observable<StoriesBeforeBean> observable = mApiService.beforeNews(date);
         mBeforeSubscribe = observable.subscribeOn(Schedulers.io())
-                .filter(new Func1<BeforeStoryBean, Boolean>() {
+                .filter(new Func1<StoriesBeforeBean, Boolean>() {
                     @Override
-                    public Boolean call(BeforeStoryBean beforeStoryBean) {
-                        return beforeStoryBean != null;
+                    public Boolean call(StoriesBeforeBean storiesBeforeBean) {
+                        return storiesBeforeBean != null;
                     }
-                }).doOnNext(new Action1<BeforeStoryBean>() {
+                }).doOnNext(new Action1<StoriesBeforeBean>() {
                     @Override
-                    public void call(BeforeStoryBean beforeStoryBean) {
-                       initReadState(beforeStoryBean.getListStories());
+                    public void call(StoriesBeforeBean storiesBeforeBean) {
+                        initReadState(storiesBeforeBean.getListStories());
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<BeforeStoryBean>() {
+                .subscribe(new Action1<StoriesBeforeBean>() {
                     @Override
-                    public void call(BeforeStoryBean beforeStoryBean) {
+                    public void call(StoriesBeforeBean storiesBeforeBean) {
                         mListNewsData.add(getDateItem(mDate));
-                        mListNewsData.addAll(beforeStoryBean.getListStories());
+                        mListNewsData.addAll(storiesBeforeBean.getListStories());
                         mView.updateNewsList(mListNewsData);
                     }
                 }, new Action1<Throwable>() {
@@ -175,32 +177,31 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
 
     protected abstract Observable<M> getLatestObservable(ApiService apiService, P params);
 
-    private void initReadState(List<ListStoryBean> beans) {
-        RealmManager realmManager = new RealmManager();
-        for(ListStoryBean bean : beans) {
-            bean.setRead(realmManager.queryNewsReadState(bean.getId()));
+    private void initReadState(List<? extends BasicStoryBean> beans) {
+        RealmManager realmManager = RealmManager.getAsyncInstance();
+        for (BasicStoryBean bean : beans) {
+            bean.setRead(realmManager.isRead(bean.getId()));
         }
         realmManager.close();
     }
 
     @Override
-    public void setReadState(ListStoryBean bean) {
-        RealmManager realmManager = new RealmManager();
-        realmManager.insertNewsReadState(bean.getId());
-        realmManager.close();
+    public void setReadState(StoryListItemBean bean) {
+        RealmManager realmManager = RealmManager.getInstance();
+        realmManager.setRead(bean);
     }
 
-    private ListStoryBean getDateItem(Date date) {
-        ListStoryBean listStoryBean = new ListStoryBean();
-        listStoryBean.setDate(true);
+    private StoryListItemBean getDateItem(Date date) {
+        StoryListItemBean storyListItemBean = new StoryListItemBean();
+        storyListItemBean.setDate(true);
         String dateString = DateUtil.formatDate(date);
-        listStoryBean.setDateString(dateString);
-        return listStoryBean;
+        storyListItemBean.setDateString(dateString);
+        return storyListItemBean;
     }
 
-    private ListStoryBean getTitleItem() {
-        ListStoryBean listStoryBean = new ListStoryBean();
-        listStoryBean.setTitle(true);
-        return listStoryBean;
+    private StoryListItemBean getTitleItem() {
+        StoryListItemBean storyListItemBean = new StoryListItemBean();
+        storyListItemBean.setTitle(true);
+        return storyListItemBean;
     }
 }

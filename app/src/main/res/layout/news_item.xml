@@ -9,7 +9,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@drawable/round_item_layer"
+        android:background="@drawable/shadow_item_selector"
         android:gravity="center_vertical"
         android:padding="10dp">
 

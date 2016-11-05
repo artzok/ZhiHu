@@ -74,9 +74,9 @@ public class ApiManager {
         builder.addInterceptor(interceptor);
 
         // time out
-        builder.connectTimeout(5, TimeUnit.SECONDS);
-        builder.readTimeout(5, TimeUnit.SECONDS);
-        builder.writeTimeout(5, TimeUnit.SECONDS);
+        builder.connectTimeout(20, TimeUnit.SECONDS);
+        builder.readTimeout(20, TimeUnit.SECONDS);
+        builder.writeTimeout(15, TimeUnit.SECONDS);
 
         // retry mechanism
         builder.retryOnConnectionFailure(true);

@@ -20,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_alignTop="@+id/iv_left_drawer_image"
-        android:layout_toRightOf="@+id/iv_left_drawer_image"
         android:layout_toEndOf="@+id/iv_left_drawer_image"
+        android:layout_toRightOf="@+id/iv_left_drawer_image"
         android:gravity="center"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
@@ -30,11 +30,11 @@
         android:textSize="16sp"/>
 
     <LinearLayout
-        android:baselineAligned="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -45,9 +45,9 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:contentDescription="@string/image_description"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:contentDescription="@string/image_description"
                 android:src="@mipmap/favorites"/>
 
             <TextView
@@ -69,9 +69,9 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:contentDescription="@string/image_description"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:contentDescription="@string/image_description"
                 android:src="@mipmap/download"/>
 
             <TextView
@@ -85,4 +85,21 @@
                 android:textStyle="bold"/>
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/btn_sections"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/old_sections"
+        android:gravity="center"
+        android:padding="3dp"
+        android:text="@string/sections"
+        android:textColor="@android:color/holo_purple"
+        android:textSize="12sp"
+        android:layout_alignBaseline="@+id/tv_left_drawer_login_tip"
+        android:layout_alignBottom="@+id/tv_left_drawer_login_tip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+
 </RelativeLayout>

@@ -1,15 +1,13 @@
 package com.zok.art.zhihu.adapter;
 
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.zok.art.zhihu.R;
-import com.zok.art.zhihu.bean.ListStoryBean;
+import com.zok.art.zhihu.bean.StoryListItemBean;
 
 import java.util.List;
 
@@ -19,9 +17,10 @@ import butterknife.BindView;
  * @author 赵坤
  * @email artzok@163.com
  */
-public class NewsListAdapter extends BaseListAdapter<ListStoryBean> {
+public class NewsListAdapter extends BaseListAdapter<StoryListItemBean> {
     private static final int ITEM_TYPE_TITLE = 1;
     private static final int ITEM_TYPE_DATE = 2;
+    private int typeCount = 3;
 
     public NewsListAdapter(Context context) {
         super(context);
@@ -43,12 +42,16 @@ public class NewsListAdapter extends BaseListAdapter<ListStoryBean> {
 
     @Override
     public int getViewTypeCount() {
-        return 3;
+        return this.typeCount;
+    }
+
+    public void setTypeCount(int typeCount) {
+        this.typeCount = typeCount;
     }
 
     @Override
     public int getItemViewType(int position) {
-        ListStoryBean item = (ListStoryBean) getItem(position);
+        StoryListItemBean item = (StoryListItemBean) getItem(position);
         if (item.isTitle())
             return ITEM_TYPE_TITLE;
         if (item.isDate())
@@ -68,7 +71,7 @@ public class NewsListAdapter extends BaseListAdapter<ListStoryBean> {
         }
 
         @Override
-        public void fillData(ListStoryBean data, int position) {
+        public void fillData(StoryListItemBean data, int position) {
             // set title
             mTitle.setText(data.getTitle());
 
@@ -95,7 +98,7 @@ public class NewsListAdapter extends BaseListAdapter<ListStoryBean> {
         }
 
         @Override
-        public void fillData(ListStoryBean data, int position) {
+        public void fillData(StoryListItemBean data, int position) {
             switch (getItemViewType(position)) {
                 case ITEM_TYPE_TITLE:
                     titleView.setText("今日热点");

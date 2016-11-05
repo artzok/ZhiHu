@@ -5,10 +5,10 @@ import android.content.Intent;
 
 import com.zok.art.zhihu.ui.comment.CommentContract;
 import com.zok.art.zhihu.ui.comment.CommentPresenter;
+import com.zok.art.zhihu.ui.detail.DetailContract;
 import com.zok.art.zhihu.ui.main.MainContract;
 import com.zok.art.zhihu.ui.main.MainPresenter;
-import com.zok.art.zhihu.ui.detail.NewsDetailContract;
-import com.zok.art.zhihu.ui.detail.NewsDetailPresenter;
+import com.zok.art.zhihu.ui.detail.DetailPresenter;
 import com.zok.art.zhihu.ui.splash.SplashContract;
 import com.zok.art.zhihu.ui.splash.SplashPresenter;
 
@@ -44,9 +44,9 @@ public class ActivityModule {
     }
 
     @Provides
-    public NewsDetailContract.Presenter provideNewsDetailPresenter() {
-        NewsDetailPresenter presenter = new NewsDetailPresenter(mIntent);
-        presenter.attachView((NewsDetailContract.View) mActivity);
+    public DetailContract.Presenter provideNewsDetailPresenter() {
+        DetailPresenter presenter = new DetailPresenter(mIntent);
+        presenter.attachView((DetailContract.View) mActivity);
         return presenter;
     }
 

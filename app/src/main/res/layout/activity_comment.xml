@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        app:theme="@style/toolBarAction"/>
+        app:theme="@style/toolBarStyle"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:indeterminateDrawable="@drawable/progress_bar_style"
+            android:indeterminateDrawable="@drawable/progress_bar"
             android:visibility="gone"/>
     </FrameLayout>
 </LinearLayout>

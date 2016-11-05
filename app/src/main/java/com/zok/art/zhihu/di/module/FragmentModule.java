@@ -3,10 +3,10 @@ package com.zok.art.zhihu.di.module;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.zok.art.zhihu.ui.homepage.HomePageContract;
-import com.zok.art.zhihu.ui.homepage.HomePagePresenter;
-import com.zok.art.zhihu.ui.themes.ThemePageContract;
-import com.zok.art.zhihu.ui.themes.ThemePagePresenter;
+import com.zok.art.zhihu.ui.home.HomeContract;
+import com.zok.art.zhihu.ui.home.HomePresenter;
+import com.zok.art.zhihu.ui.themes.ThemeContract;
+import com.zok.art.zhihu.ui.themes.ThemePresenter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -26,16 +26,16 @@ public class FragmentModule {
     }
 
     @Provides
-    public HomePageContract.Presenter provideHomePagePresenter() {
-        HomePagePresenter presenter = new HomePagePresenter(initParams);
-        presenter.attachView((HomePageContract.View) mFragment);
+    public HomeContract.Presenter provideHomePagePresenter() {
+        HomePresenter presenter = new HomePresenter(initParams);
+        presenter.attachView((HomeContract.View) mFragment);
         return presenter;
     }
 
     @Provides
-    public ThemePageContract.Presenter provideThemePagePresenter() {
-        ThemePagePresenter presenter = new ThemePagePresenter(initParams);
-        presenter.attachView((ThemePageContract.View) mFragment);
+    public ThemeContract.Presenter provideThemePagePresenter() {
+        ThemePresenter presenter = new ThemePresenter(initParams);
+        presenter.attachView((ThemeContract.View) mFragment);
         return presenter;
     }
 }

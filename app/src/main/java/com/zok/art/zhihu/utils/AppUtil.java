@@ -46,70 +46,70 @@ public class AppUtil {
         sCacheMap = new HashMap<>();
     }
 
-    public static final void putGlobal(String key, Object value) {
+    public static void putGlobal(String key, Object value) {
         sCacheMap.put(key, value);
     }
 
-    public static final Object getGlobal(String key, Object defaultValue) {
+    public static Object getGlobal(String key, Object defaultValue) {
         Object va = sCacheMap.get(key);
         if (va == null) return defaultValue;
         return va;
     }
 
-    public static final DisplayMetrics getDisplayMetrics() {
+    public static DisplayMetrics getDisplayMetrics() {
         return getAppRes().getDisplayMetrics();
     }
 
-    public static final String formatByteSize(long size) {
+    public static String formatByteSize(long size) {
         return Formatter.formatFileSize(getAppContext(), size);
     }
 
-    public static final Context getAppContext() {
+    public static Context getAppContext() {
         return sContext;
     }
 
-    public static final int getMainThreadId() {
+    public static int getMainThreadId() {
         return sThreadId;
     }
 
-    public static final Handler getMainHandler() {
+    public static Handler getMainHandler() {
         return sHandler;
     }
 
-    public static final Gson getGson() {
+    public static Gson getGson() {
         return sGson;
     }
 
-    public static final Resources getAppRes() {
+    public static Resources getAppRes() {
         return getAppContext().getResources();
     }
 
-    public static final String getPackageName() {
+    public static String getPackageName() {
         return getAppContext().getPackageName();
     }
 
-    public static final File getCacheDir() {
+    public static File getCacheDir() {
         return getAppContext().getCacheDir();
     }
 
-    public static final String getString(int strId) {
+    public static String getString(int strId) {
         return getAppRes().getString(strId);
     }
 
-    public static final String getString(int strId, String format) {
+    public static String getString(int strId, String format) {
         return getAppRes().getString(strId, format);
     }
 
-    public static final String[] getStrArr(int arrId) {
+    public static String[] getStrArr(int arrId) {
         return getAppRes().getStringArray(arrId);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public static final int getColor(int colId) {
+    public static int getColor(int colId) {
         return getAppRes().getColor(colId, getAppContext().getTheme());
     }
 
-    public static final void safeHandle(Runnable runnable) {
+    public static void safeHandle(Runnable runnable) {
         int currId = Process.myTid();
         if (currId == getMainThreadId())
             runnable.run();
