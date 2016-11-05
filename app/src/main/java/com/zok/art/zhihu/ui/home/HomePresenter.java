@@ -17,8 +17,8 @@ import rx.Observable;
  * @author 赵坤
  * @email artzok@163.com
  */
-public class HomePresenter extends RefreshPresenter<StoriesLatestBean, HomeContract.View, Object>
-        implements HomeContract.Presenter {
+public class HomePresenter extends RefreshPresenter<StoriesLatestBean, HomeFragment, Object>
+        {
 
     public HomePresenter(Bundle initParams) {
         super(initParams);

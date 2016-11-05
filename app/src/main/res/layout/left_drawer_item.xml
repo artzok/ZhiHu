@@ -24,5 +24,5 @@
         android:contentDescription="@string/image_description"
         android:layout_width="12dp"
         android:layout_height="12dp"
-        android:src="@mipmap/menu_follow_highlight"/>
+        android:src="@drawable/menu_follow_highlight"/>
 </LinearLayout>

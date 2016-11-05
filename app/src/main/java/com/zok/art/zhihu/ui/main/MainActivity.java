@@ -8,31 +8,25 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.adapter.DrawerListAdapter;
-import com.zok.art.zhihu.adapter.SectionsAdapter;
 import com.zok.art.zhihu.base.BaseActivity;
 import com.zok.art.zhihu.bean.SectionBean;
 import com.zok.art.zhihu.bean.ThemeItemBean;
 import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.ui.collected.CollectedActivity;
 import com.zok.art.zhihu.ui.home.HomeFragment;
-import com.zok.art.zhihu.ui.sections.SectionsActivity;
 import com.zok.art.zhihu.utils.AppUtil;
 import com.zok.art.zhihu.utils.ToastUtil;
 
@@ -180,8 +174,12 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     public void updateThemeList(List<ThemeItemBean> themes) {
         mDrawerListAdapter.setDataAndRefresh(themes);
         // go to theme page or home page after theme list has been updated
-        Integer global = (Integer) AppUtil.getGlobal(Constants.LAST_SCAN_THEME, 0);
-        mLvLeftDrawerList.performItemClick(null, global, 0);
+        Integer page = (Integer) AppUtil.getGlobal(Constants.LAST_SCAN_THEME, 0);
+        if(page != -1) {
+            mLvLeftDrawerList.performItemClick(null, page, 0);
+        } else {
+            goSections();
+        }
     }
 
     @Override
@@ -257,8 +255,8 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     public void onBackPressed() {
 
         // close left navigation
-        if (mLeftDrawer.isDrawerOpen(Gravity.LEFT)) {
-            mLeftDrawer.closeDrawer(Gravity.LEFT);
+        if (mLeftDrawer.isDrawerOpen(GravityCompat.START)) {
+            mLeftDrawer.closeDrawer(GravityCompat.START);
             return;
         }
 
@@ -276,13 +274,30 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     public void onNavigateClick(View v) {
         switch (v.getId()) {
             case R.id.btn_sections:
-                Intent sections = new Intent(this, SectionsActivity.class);
-                startActivity(sections);
+                goSections();
                 break;
             case R.id.ll_left_drawer_favorites:
-            Intent favorites = new Intent(this, CollectedActivity.class);
-            startActivity(favorites);
+                Intent favorites = new Intent(this, CollectedActivity.class);
+                startActivity(favorites);
                 break;
         }
+    }
+
+    private void goSections() {
+        // close left drawer
+        mLeftDrawer.closeDrawer(GravityCompat.START);
+        // set global flag variable that mark the last position of themes list
+        AppUtil.putGlobal(Constants.LAST_SCAN_THEME, -1);
+        // switch sections
+        mPresenter.switchSections();
+    }
+
+    public void goSection(SectionBean bean) {
+        // close left drawer
+        mLeftDrawer.closeDrawer(GravityCompat.START);
+        // set global flag variable that mark the last position of themes list
+        AppUtil.putGlobal(Constants.LAST_SCAN_THEME, -1);
+        // switch sections
+        mPresenter.switchSection(bean);
     }
 }

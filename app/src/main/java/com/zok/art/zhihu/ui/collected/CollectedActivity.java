@@ -50,10 +50,6 @@ public class CollectedActivity extends BaseActivity implements AdapterView.OnIte
     }
 
     @Override
-    protected void setWindowFeature() {
-    }
-
-    @Override
     protected void initInject() {
     }
 

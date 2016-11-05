@@ -69,10 +69,6 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
     }
 
     @Override
-    protected void setWindowFeature() {
-    }
-
-    @Override
     protected void initInject() {
         getActivityComponent().inject(this);
     }

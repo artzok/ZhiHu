@@ -17,8 +17,7 @@ import rx.Observable;
  * @email artzok@163.com
  */
 public class ThemePresenter extends
-        RefreshPresenter<ThemeNewsBean, ThemeContract.View, ThemeItemBean>
-    implements ThemeContract.Presenter {
+        RefreshPresenter<ThemeNewsBean, ThemeFragment, ThemeItemBean> {
 
     public ThemePresenter(Bundle initParams) {
         super(initParams);

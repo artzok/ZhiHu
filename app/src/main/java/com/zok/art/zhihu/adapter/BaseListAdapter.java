@@ -21,7 +21,7 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
     static final int ITEM_TYPE_NORMAL = 0;       // Plain item flag
 
     private Context mContext;
-    protected List<T> data;
+    private List<T> data;
 
     BaseListAdapter(Context context) {
         this.mContext = context;
@@ -52,7 +52,7 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
      *
      * @return Context of a activity
      */
-    protected Context getContext() {
+    Context getContext() {
         return mContext;
     }
 
@@ -95,10 +95,10 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
 
     /**
      * Child class must implement the method, then create a instance of
-     * {@code BaseViewHolder} subclass and return according to {@code itemViewType}
+     * {@code BaseRecyclerViewHolder} subclass and return according to {@code itemViewType}
      *
      * @param itemViewType Item type.
-     * @param itemView Item view object.
+     * @param itemView     Item view object.
      * @return
      */
     protected abstract BaseViewHolder createViewHolder(int itemViewType, View itemView);

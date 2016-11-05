@@ -33,7 +33,7 @@ import rx.schedulers.Schedulers;
 public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
         implements RefreshContract.Presenter<M, V> {
     private V mView;
-    private P mInitParams;
+    protected P mInitParams;
 
     // latest data and list
     protected M mLatestData;
@@ -145,8 +145,7 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
 
     private void LoadBeforeData() {
         mDate = DateUtil.getBeforeDate(mDate);
-        String date = DateUtil.formatDate(mDate, "yyyyMMdd");
-        Observable<StoriesBeforeBean> observable = mApiService.beforeNews(date);
+        Observable<StoriesBeforeBean> observable = getBeforeObservable(mApiService, mInitParams, mDate);
         mBeforeSubscribe = observable.subscribeOn(Schedulers.io())
                 .filter(new Func1<StoriesBeforeBean, Boolean>() {
                     @Override
@@ -176,6 +175,11 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
     }
 
     protected abstract Observable<M> getLatestObservable(ApiService apiService, P params);
+
+    protected Observable<StoriesBeforeBean> getBeforeObservable(ApiService apiService, P params, Date date) {
+        return mApiService.beforeNews(DateUtil.formatDate(date, "yyyyMMdd"));
+    }
+
 
     private void initReadState(List<? extends BasicStoryBean> beans) {
         RealmManager realmManager = RealmManager.getAsyncInstance();

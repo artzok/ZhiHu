@@ -11,8 +11,8 @@ import com.zok.art.zhihu.bean.StoriesLatestBean;
 import com.zok.art.zhihu.bean.StoryBannerItemBean;
 import com.zok.art.zhihu.ui.refresh.RefreshFragment;
 
-public class HomeFragment extends RefreshFragment<StoriesLatestBean, HomeContract.Presenter>
-        implements HomeContract.View, SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends RefreshFragment<StoriesLatestBean, HomePresenter>
+        implements SwipeRefreshLayout.OnRefreshListener {
     // header view : image banner
     private AutoViewPager mBannerView;
     private BannerPageAdapter mBannerAdapter;

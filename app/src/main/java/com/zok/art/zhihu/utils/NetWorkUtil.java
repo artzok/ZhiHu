@@ -13,8 +13,6 @@ public class NetWorkUtil {
         ConnectivityManager connectivityManager = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED)
-            return true;
-        return false;
+        return networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED;
     }
 }

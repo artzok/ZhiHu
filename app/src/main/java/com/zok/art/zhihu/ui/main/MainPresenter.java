@@ -12,6 +12,8 @@ import com.zok.art.zhihu.bean.SectionListBean;
 import com.zok.art.zhihu.bean.ThemeItemBean;
 import com.zok.art.zhihu.bean.ThemeListBean;
 import com.zok.art.zhihu.ui.home.HomeFragment;
+import com.zok.art.zhihu.ui.section.SectionFragment;
+import com.zok.art.zhihu.ui.sections.SectionsFragment;
 import com.zok.art.zhihu.ui.themes.ThemeFragment;
 import com.zok.art.zhihu.utils.AppUtil;
 
@@ -35,6 +37,7 @@ public class MainPresenter implements Presenter {
     private View mView;
     private ApiService mService;
     private Fragment mHomePageFragment;
+    private SectionsFragment mSectionsFragment;
     private List<ThemeItemBean> mThemeItemBeen;
     private SparseArray<Fragment> mThemeFragments;
 
@@ -45,6 +48,7 @@ public class MainPresenter implements Presenter {
     public MainPresenter(Intent intent) {
         mService = ApiManager.getApiService();
         mHomePageFragment = HomeFragment.newInstance();
+        mSectionsFragment = SectionsFragment.newInstance();
         mThemeFragments = new SparseArray<>();
 
     }
@@ -65,6 +69,14 @@ public class MainPresenter implements Presenter {
     }
 
     @Override
+    public void switchHome() {
+        // update title
+        mView.updateTitle(AppUtil.getString(R.string.menu_home_tip));
+        // fragment trans
+        mView.replaceFragment(mHomePageFragment);
+    }
+
+    @Override
     public void switchTheme(int position) {
         // update theme title
         ThemeItemBean bean = mThemeItemBeen.get(position);
@@ -73,12 +85,17 @@ public class MainPresenter implements Presenter {
         mView.replaceFragment(getThemeFragment(position));
     }
 
+
     @Override
-    public void switchHome() {
-        // update title
-        mView.updateTitle(AppUtil.getString(R.string.menu_home_tip));
-        // fragment trans
-        mView.replaceFragment(mHomePageFragment);
+    public void switchSections() {
+        mView.updateTitle("旧版栏目");
+        mView.replaceFragment(mSectionsFragment);
+    }
+
+    @Override
+    public void switchSection(SectionBean bean) {
+        SectionFragment fragment = SectionFragment.newInstance(bean);
+        mView.replaceFragment(fragment);
     }
 
     private Fragment getThemeFragment(int i) {

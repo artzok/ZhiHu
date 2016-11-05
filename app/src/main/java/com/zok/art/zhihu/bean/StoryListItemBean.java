@@ -16,6 +16,8 @@ public class StoryListItemBean extends BasicStoryBean {
 
     @SerializedName("images")
     private List<String> mImageUrls;
+    private String date;
+    private String display_date;
 
     @Expose(serialize = false, deserialize = false)
     private boolean isDate;
@@ -25,6 +27,22 @@ public class StoryListItemBean extends BasicStoryBean {
 
     @Expose(serialize = false, deserialize = false)
     private boolean isTitle;
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getDisplay_date() {
+        return display_date;
+    }
+
+    public void setDisplay_date(String display_date) {
+        this.display_date = display_date;
+    }
 
     public boolean isTitle() {
         return isTitle;

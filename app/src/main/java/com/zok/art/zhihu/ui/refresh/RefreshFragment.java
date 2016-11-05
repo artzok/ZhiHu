@@ -58,10 +58,13 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
     }
 
     private void initSubView() {
-        View headerView = getActivity().getLayoutInflater().inflate(getHeaderViewLayoutId(), null);
-        // 子类初始化headerView控件
-        initHeaderView(headerView);
-        mNewsListView.addHeaderView(headerView);
+        int id = getHeaderViewLayoutId();
+        if (id != -1) {
+            View headerView = getActivity().getLayoutInflater().inflate(id, null);
+            // 子类初始化headerView控件
+            initHeaderView(headerView);
+            mNewsListView.addHeaderView(headerView);
+        }
 
         // last news item adapter
         mNewsAdapter = new NewsListAdapter(getActivity());

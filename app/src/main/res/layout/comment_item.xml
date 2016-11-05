@@ -8,7 +8,7 @@
         android:id="@+id/iv_user_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@mipmap/account_avatar"/>
+        android:src="@drawable/account_avatar"/>
 
     <LinearLayout
         android:id="@+id/user_info"
@@ -29,7 +29,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:singleLine="true"
-            android:text="为什么每次下雪我不在意的夜晚"
             android:textSize="16sp"
             android:textStyle="bold"/>
 
@@ -44,8 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:gravity="top"
-            android:text="0"
             android:textSize="14sp"/>
     </LinearLayout>
 
@@ -64,6 +63,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tv_comment_count"
+        android:layout_alignStart="@id/tv_comment_count"
         android:layout_below="@id/tv_comment_count"
         android:layout_marginTop="20dp"
         android:textSize="12sp"/>

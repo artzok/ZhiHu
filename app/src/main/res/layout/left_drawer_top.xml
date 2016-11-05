@@ -13,7 +13,7 @@
         android:id="@+id/iv_left_drawer_image"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:src="@mipmap/account_avatar"/>
+        android:src="@drawable/account_avatar"/>
 
     <TextView
         android:id="@+id/tv_left_drawer_login_tip"
@@ -48,7 +48,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:contentDescription="@string/image_description"
-                android:src="@mipmap/favorites"/>
+                android:src="@drawable/favorites"/>
 
             <TextView
                 android:id="@+id/tv_left_drawer_favorites_tip"
@@ -72,7 +72,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:contentDescription="@string/image_description"
-                android:src="@mipmap/download"/>
+                android:src="@drawable/download"/>
 
             <TextView
                 android:id="@+id/tv_left_drawer_download_tip"

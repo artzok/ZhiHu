@@ -9,6 +9,7 @@ import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.bean.ThemeItemBean;
 import com.zok.art.zhihu.bean.ThemeNewsBean;
 import com.zok.art.zhihu.config.Constants;
+import com.zok.art.zhihu.ui.refresh.RefreshContract;
 import com.zok.art.zhihu.ui.refresh.RefreshFragment;
 
 /**
@@ -16,8 +17,8 @@ import com.zok.art.zhihu.ui.refresh.RefreshFragment;
  * @email artzok@163.com
  */
 public class ThemeFragment extends
-        RefreshFragment<ThemeNewsBean, ThemeContract.Presenter>
-        implements ThemeContract.View{
+        RefreshFragment<ThemeNewsBean, ThemePresenter>
+       {
 
     private ImageView mThemePageHeader;
 

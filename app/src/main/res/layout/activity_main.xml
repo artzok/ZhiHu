@@ -14,6 +14,7 @@
         android:orientation="vertical">
         <!--Status Bar : compromise method -->
         <ImageView
+            android:contentDescription="@string/image_description"
             android:id="@+id/status_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

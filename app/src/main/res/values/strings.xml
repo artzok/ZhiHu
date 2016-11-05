@@ -21,10 +21,6 @@
         <item>android.permission.ACCESS_NETWORK_STATE</item>
     </string-array>
 
-    <string name="action_share">分享</string>
-    <string name="action_collect">收藏</string>
-    <string name="action_comment">评论</string>
-    <string name="action_praise">点赞</string>
     <string name="image_description">这是一张图片</string>
     <string name="action_write_comment">写评论</string>
     <string name="empty_description">空空如也\n赶紧去收藏吧</string>

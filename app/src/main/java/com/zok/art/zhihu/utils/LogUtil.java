@@ -56,35 +56,35 @@ public class LogUtil {
     }
 
     private boolean ensureLevel(int level) {
-        return !(GLOBAL_LOG_LEVEL < level || log_level < level);
+        return (GLOBAL_LOG_LEVEL < level || log_level < level);
     }
 
     private void verbose(String tag, String msg, boolean format) {
-        if (!ensureLevel(LOG_VERBOSE)) return;
+        if (ensureLevel(LOG_VERBOSE)) return;
         if (format) msg = getFormat(msg, LOG_VERBOSE);
         Log.v(tag, msg);
     }
 
     private void info(String tag, String msg, boolean format) {
-        if (!ensureLevel(LOG_INFO)) return;
+        if (ensureLevel(LOG_INFO)) return;
         if (format) msg = getFormat(msg, LOG_INFO);
         Log.i(tag, msg);
     }
 
     private void debug(String tag, String msg, boolean format) {
-        if (!ensureLevel(LOG_DEBUG)) return;
+        if (ensureLevel(LOG_DEBUG)) return;
         if (format) msg = getFormat(msg, LOG_DEBUG);
         Log.d(tag, msg);
     }
 
     private void warn(String tag, String msg, boolean format) {
-        if (!ensureLevel(LOG_WARN)) return;
+        if (ensureLevel(LOG_WARN)) return;
         if (format) msg = getFormat(msg, LOG_WARN);
         Log.w(tag, msg);
     }
 
     private void error(String tag, String msg, boolean format) {
-        if (!ensureLevel(LOG_ERROR)) return;
+        if (ensureLevel(LOG_ERROR)) return;
         if (format) msg = getFormat(msg, LOG_ERROR);
         Log.e(tag, msg);
     }

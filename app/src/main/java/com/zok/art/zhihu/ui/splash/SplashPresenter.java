@@ -128,6 +128,6 @@ public class SplashPresenter implements Presenter {
 
     private Bitmap getDefaultSplashBitmap() {
         return BitmapFactory.decodeResource(
-                AppUtil.getAppRes(), R.mipmap.default_splash);
+                AppUtil.getAppRes(), R.drawable.default_splash);
     }
 }

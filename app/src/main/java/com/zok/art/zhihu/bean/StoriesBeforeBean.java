@@ -14,6 +14,24 @@ public class StoriesBeforeBean {
     private Date mDate;
     @SerializedName("stories")
     private List<StoryListItemBean> mListStories;
+    private String name;
+    private long timestamp;
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Date getDate() {
         return mDate;

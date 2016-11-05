@@ -36,53 +36,87 @@ import static android.support.v7.app.AppCompatDelegate.setDefaultNightMode;
  */
 public abstract class BaseActivity<T extends BasePresenter>
         extends AppCompatActivity implements BaseView {
+
+    /*日间/夜景 模式记录键值*/
     private static final String DAY_NIGHT_MODE = "day_night_mode";
+
+    /*运行时权限成功授权码*/
     private static final int GRAND = PackageManager.PERMISSION_GRANTED;
+
+    /*日志打印对象*/
     protected final LogUtil log = LogUtil.getLogUtil(this.getClass());
 
+    /**
+     * PRESENTER层对象
+     */
     @Inject
     protected T mPresenter;
 
+    /**
+     * 控件解绑对象
+     */
     private Unbinder mUnBinder;
 
+    /**
+     * 沉浸式标志
+     */
     private boolean isImmersion;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 1. 处理屏幕状态参数
-        setWindowFeature();
+        // 1. 初始化窗口参数
+        initWindowParams();
+
         // 2. 初始化窗口布局
         initWindowUI();
-        // 4.  注入P层
+
+        // 4. 注入PRESENTER层
         initInject();
-        //请求权限
+
+        // 5. 请求权限
         requestPermissions();
     }
 
-    protected void setWindowFeature() {
-        requestImmersion();
+    /*初始化窗口参数*/
+    protected void initWindowParams() {
     }
 
 
-    protected void initWindowUI() {
-        // 设置内容布局
+    /*初始化窗口布局*/
+    private void initWindowUI() {
+        // 设置布局
         setContentView(getLayoutResId());
-        // 绑定所有控件
+
+        // 绑定控件
         mUnBinder = ButterKnife.bind(this);
     }
 
+    /**
+     * 子类必须实现该方法并返回当前Activity的布局ID
+     *
+     * @return 布局资源ID
+     */
     protected abstract int getLayoutResId();
 
+    /**
+     * 子类必须实现该方法并添加注入代码
+     */
     protected abstract void initInject();
 
+    /**
+     * Dagger2注入工具对象
+     *
+     * @return Activity注入工具
+     */
     protected ActivityComponent getActivityComponent() {
         return DaggerActivityComponent.builder().activityModule(
                 new ActivityModule(this, getIntent())).build();
     }
 
+    /*请求权限*/
     private void requestPermissions() {
-       final String[] permissions = AppUtil.getStrArr(getPermissionArrId());
+        final String[] permissions = AppUtil.getStrArr(getPermissionArrId());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean result = true;
             for (String permission : permissions) {
@@ -142,7 +176,7 @@ public abstract class BaseActivity<T extends BasePresenter>
         return R.array.basic_permissions;
     }
 
-    public void switchNightMode() {
+    protected void switchNightMode() {
         boolean isNight = !(Boolean) AppUtil.getGlobal(DAY_NIGHT_MODE, false);
         setDefaultNightMode(isNight ? MODE_NIGHT_YES : MODE_NIGHT_NO);
         AppUtil.putGlobal(DAY_NIGHT_MODE, isNight);

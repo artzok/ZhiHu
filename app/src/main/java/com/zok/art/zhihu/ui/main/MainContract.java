@@ -46,5 +46,9 @@ public interface MainContract {
          * 切换到Home页面
          */
         void switchHome();
+
+        void switchSections();
+
+        void switchSection(SectionBean bean);
     }
 }

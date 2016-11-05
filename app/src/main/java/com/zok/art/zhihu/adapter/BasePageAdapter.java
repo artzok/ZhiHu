@@ -19,9 +19,9 @@ import java.util.List;
 public abstract class BasePageAdapter<T extends ITitleBean> extends PagerAdapter {
     private Context mContext;
     private List<View> views;
-    protected List<T> data;
+    private List<T> data;
 
-    public BasePageAdapter(Context context) {
+    BasePageAdapter(Context context) {
         this.mContext = context;
     }
 
@@ -68,7 +68,7 @@ public abstract class BasePageAdapter<T extends ITitleBean> extends PagerAdapter
      *
      * @return Context of a activity
      */
-    protected Context getContext() {
+    Context getContext() {
         return mContext;
     }
 
@@ -101,8 +101,9 @@ public abstract class BasePageAdapter<T extends ITitleBean> extends PagerAdapter
 
     /**
      * Child class must implement the method and fill UI.
+     *
      * @param itemView item view.
-     * @param data data of item view.
+     * @param data     data of item view.
      */
     protected abstract void fillData(View itemView, T data);
 

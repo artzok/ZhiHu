@@ -4,6 +4,7 @@ import com.zok.art.zhihu.bean.CommentListBean;
 import com.zok.art.zhihu.bean.NewsDetailBean;
 import com.zok.art.zhihu.bean.NewsExtraBean;
 import com.zok.art.zhihu.bean.SectionListBean;
+import com.zok.art.zhihu.bean.SectionNewsBean;
 import com.zok.art.zhihu.bean.SplashBean;
 import com.zok.art.zhihu.bean.StoriesBeforeBean;
 import com.zok.art.zhihu.bean.StoriesLatestBean;
@@ -68,11 +69,15 @@ public interface ApiService {
 
     @GET("3/sections")
     Observable<SectionListBean> getSections();
-    //http://news-at.zhihu.com/api/3/sections
 
+    //http://news-at.zhihu.com/api/3/sections
+    @GET("3/section/{id}")
+    Observable<SectionNewsBean> getSectionNews(@Path("id") long id);
     //http://news-at.zhihu.com/api/3/section/1
-    //http://news-at.zhihu.com/api/4/story/#{id}/recommenders
+    @GET("4/section/{id}/before/{timestamp}")
+    Observable<StoriesBeforeBean> getSectionNewsBefore(@Path("id") long id, @Path("timestamp") long date);
     //http://news-at.zhihu.com/api/4/section/#{section id}/before/#{timestamp}
+    //http://news-at.zhihu.com/api/4/story/#{id}/recommenders
     //http://news-at.zhihu.com/api/4/editor/#{id}/profile-page/android
 
     @GET

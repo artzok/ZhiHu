@@ -91,10 +91,10 @@ public class BasicStoryBean implements ITitleBean, Parcelable {
         dest.writeByte(this.isRead ? (byte) 1 : (byte) 0);
     }
 
-    public BasicStoryBean() {
+     BasicStoryBean() {
     }
 
-    protected BasicStoryBean(Parcel in) {
+     BasicStoryBean(Parcel in) {
         this.type = in.readInt();
         this.id = in.readLong();
         this.ga_prefix = in.readString();
