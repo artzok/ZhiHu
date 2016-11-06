@@ -25,8 +25,10 @@ import static com.zok.art.zhihu.ui.splash.SplashContract.View;
  */
 public class SplashActivity extends
         BaseActivity<SplashContract.Presenter> implements View {
+
     @BindView(R.id.iv_splash_image)
     public ImageView mSplashImage;
+
     @BindView(R.id.tv_splash_author)
     public TextView mSplashAuthor;
 
@@ -44,12 +46,6 @@ public class SplashActivity extends
     protected void requestPermissionSucceed() {
         requestImmersion();     // 沉浸式模式
         mPresenter.start();     // 启动P层逻辑
-    }
-
-    @Override
-    public void showError(String msg, Throwable e) {
-        ToastUtil.show(this, msg);
-        log.e(msg + ":" + e.getMessage());
     }
 
     @Override

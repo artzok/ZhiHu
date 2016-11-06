@@ -6,6 +6,7 @@ import android.os.Looper;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.api.ApiManager;
 import com.zok.art.zhihu.api.ApiService;
+import com.zok.art.zhihu.base.BaseFragmentPresenter;
 import com.zok.art.zhihu.bean.BasicStoryBean;
 import com.zok.art.zhihu.bean.StoriesBeforeBean;
 import com.zok.art.zhihu.bean.StoryListItemBean;
@@ -14,6 +15,7 @@ import com.zok.art.zhihu.db.RealmManager;
 import com.zok.art.zhihu.utils.AppUtil;
 import com.zok.art.zhihu.utils.CastUtil;
 import com.zok.art.zhihu.utils.DateUtil;
+import com.zok.art.zhihu.utils.RxJavaUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -31,8 +33,7 @@ import rx.schedulers.Schedulers;
  * @email artzok@163.com
  */
 public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
-        implements RefreshContract.Presenter<M, V> {
-    private V mView;
+        extends BaseFragmentPresenter<V> implements RefreshContract.Presenter<M, V> {
     protected P mInitParams;
 
     // latest data and list
@@ -47,25 +48,23 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
 
     private Date mDate;
 
-    public RefreshPresenter(Bundle initParams) {
+    @Override
+    public void setParams(Bundle initParams) {
         if (initParams != null)
             mInitParams = CastUtil.cast(initParams.getParcelable(Constants.EXTRA_INIT_PARAMS));
         mApiService = ApiManager.getApiService();
     }
 
     @Override
-    public void attachView(V view) {
-        mView = view;
-    }
-
-    @Override
-    public void detachView() {
-        mView = null;
-    }
-
-    @Override
     public void start() {
         updateLatest();
+    }
+
+    @Override
+    public void stopUpdate() {
+        mView.closeRefreshUI();
+        RxJavaUtils.releaseSubscribe(mLatestSubscribe);
+        RxJavaUtils.releaseSubscribe(mBeforeSubscribe);
     }
 
     @Override
@@ -83,26 +82,6 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
         if (mBeforeSubscribe == null || mBeforeSubscribe.isUnsubscribed()) {
             LoadBeforeData();
         }
-    }
-
-    @Override
-    public void pause() {
-        // 如果正在加载，则取消加载并关闭刷新UI
-        if (mLatestSubscribe != null && !mLatestSubscribe.isUnsubscribed()) {
-            mLatestSubscribe.unsubscribe();
-            mView.closeRefreshUI();
-        }
-
-        if (mBeforeSubscribe != null && !mBeforeSubscribe.isUnsubscribed()) {
-            mBeforeSubscribe.unsubscribe();
-        }
-    }
-
-    @Override
-    public void resume() {
-        // 可以选择切换界面重新加载
-        // updateLatest();
-        mDate = new Date();
     }
 
     private void loadLatestData() {
@@ -144,6 +123,7 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
     }
 
     private void LoadBeforeData() {
+        if(mDate == null) mDate = new Date();
         mDate = DateUtil.getBeforeDate(mDate);
         Observable<StoriesBeforeBean> observable = getBeforeObservable(mApiService, mInitParams, mDate);
         mBeforeSubscribe = observable.subscribeOn(Schedulers.io())

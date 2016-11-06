@@ -9,7 +9,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,13 +21,14 @@ import android.widget.TextView;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.adapter.DrawerListAdapter;
 import com.zok.art.zhihu.base.BaseActivity;
+import com.zok.art.zhihu.base.BaseFragment;
+import com.zok.art.zhihu.base.BaseFragmentContract;
 import com.zok.art.zhihu.bean.SectionBean;
 import com.zok.art.zhihu.bean.ThemeItemBean;
 import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.ui.collected.CollectedActivity;
 import com.zok.art.zhihu.ui.home.HomeFragment;
 import com.zok.art.zhihu.utils.AppUtil;
-import com.zok.art.zhihu.utils.ToastUtil;
 
 import java.util.List;
 
@@ -65,7 +65,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     public LinearLayout mDownloadBtn;           // 离线下载
 
     private DrawerListAdapter mDrawerListAdapter;
-    private FragmentManager mManager;
+    private FragmentManager mFragmentManager;
 
 
     @Override
@@ -76,11 +76,6 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     @Override
     protected void initInject() {
         getActivityComponent().inject(this);
-    }
-
-    @Override
-    protected void requestImmersion() {
-        // 禁用沉浸式
     }
 
     @Override
@@ -107,38 +102,49 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_day_night:
-                switchNightMode();
-                break;
-            case android.R.id.home:
-                mToggle.onOptionsItemSelected(item);
-                break;
+        int id = item.getItemId();
+        // 夜景切换
+        if (id == R.id.action_day_night) {
+            switchNightMode();
+        }
+        // 侧边导航显示
+        else if (id == android.R.id.home) {
+            mToggle.onOptionsItemSelected(item);
         }
         return true;
     }
 
     @Override
     protected void requestPermissionSucceed() {
-        mManager = getSupportFragmentManager();
+
+        // 获得Fragment管理器
+        mFragmentManager = getSupportFragmentManager();
+
+        // 初始化窗口装饰
         initDecorate();
+
+        // 初始化侧边导航
         initDrawer();
-        initEvent();
+
+        // 设置监听器
+        setListener();
+
+        // 启动PRESENTER层逻辑
         mPresenter.start();
     }
 
 
     private void initDecorate() {
-        // Set height of status bar
+        // 设置状态栏高度
         int height = AppUtil.getStatusHeight(this);
         mStatusBar.setMinimumHeight(height);
         mStatusBar.setMaxHeight(height);
 
-        // 设置ToolBar
+        // 设置ActionBar
         mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
 
-        // 设置toggle Button与DrawerLayout关联
+        // toggle与DrawerLayout关联
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToggle = new ActionBarDrawerToggle(this, mLeftDrawer,
                 R.string.open_drawer_desc, R.string.close_drawer_desc);
@@ -146,23 +152,19 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         mToggle.syncState();
     }
 
-    public void initDrawer() {
-        // left drawer head view
+    private void initDrawer() {
+        // 为侧边栏添加头部
         View headView = getLayoutInflater().inflate(R.layout.left_drawer_head, null);
         mLvLeftDrawerList.addHeaderView(headView);
+
+        // 为导航列表设置适配器
         mDrawerListAdapter = new DrawerListAdapter(this);
         mLvLeftDrawerList.setAdapter(mDrawerListAdapter);
     }
 
-    public void initEvent() {
+    private void setListener() {
+        // 为侧边导航列表设置适配器
         mLvLeftDrawerList.setOnItemClickListener(this);
-    }
-
-    @Override
-    public void showError(String msg, Throwable e) {
-        ToastUtil.show(this, msg + e.getMessage());
-        log.d(msg + ":" + e.getMessage());
-
     }
 
     @Override
@@ -172,10 +174,12 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
 
     @Override
     public void updateThemeList(List<ThemeItemBean> themes) {
+        // 刷新主题列表
         mDrawerListAdapter.setDataAndRefresh(themes);
-        // go to theme page or home page after theme list has been updated
+
+        // 根据全局参数替换Fragment
         Integer page = (Integer) AppUtil.getGlobal(Constants.LAST_SCAN_THEME, 0);
-        if(page != -1) {
+        if (page != -1) {
             mLvLeftDrawerList.performItemClick(null, page, 0);
         } else {
             goSections();
@@ -201,36 +205,30 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     }
 
     @Override
-    public void replaceFragment(Fragment instance) {
+    public void replaceFragment(BaseFragment instance) {
         try {
             String hashCode = Integer.toString(instance.hashCode());
 
             Fragment addedFragment = getForehand();
 
             // start transaction
-            FragmentTransaction transaction = mManager.beginTransaction();
+            FragmentTransaction transaction = mFragmentManager.beginTransaction();
 
             if (addedFragment != null) {
-                if (Integer.toString(addedFragment.hashCode()).equals(hashCode)) {
-                    transaction.commit();
-                    return;
-                }
-                addedFragment.onPause();
+                ((BaseFragment)addedFragment).stopUpdate();
                 transaction.hide(addedFragment);
             }
 
-            Fragment cachedFragment = mManager.findFragmentByTag(hashCode);
+            Fragment cachedFragment = mFragmentManager.findFragmentByTag(hashCode);
             if (cachedFragment == null) {
                 cachedFragment = instance;
                 transaction.add(R.id.fragment_container, cachedFragment, hashCode);
             } else {
                 transaction.show(cachedFragment);
-                cachedFragment.onResume();
+                ((BaseFragmentContract.View)cachedFragment).reStartUpdate();
             }
             transaction.addToBackStack(hashCode);
             transaction.commit();
-
-            log.e("hash", "replace hash code:" + hashCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -238,14 +236,14 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
 
 
     private Fragment getForehand() {
-        int count = mManager.getBackStackEntryCount();
+        int count = mFragmentManager.getBackStackEntryCount();
         Fragment addedFragment = null;
         FragmentManager.BackStackEntry entryAt;
         if (count > 0) {
-            entryAt = mManager.getBackStackEntryAt(count - 1);
+            entryAt = mFragmentManager.getBackStackEntryAt(count - 1);
             if (entryAt != null) {
                 String hashCode = entryAt.getName();
-                addedFragment = mManager.findFragmentByTag(hashCode);
+                addedFragment = mFragmentManager.findFragmentByTag(hashCode);
             }
         }
         return addedFragment;

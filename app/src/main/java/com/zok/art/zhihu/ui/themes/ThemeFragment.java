@@ -17,8 +17,7 @@ import com.zok.art.zhihu.ui.refresh.RefreshFragment;
  * @email artzok@163.com
  */
 public class ThemeFragment extends
-        RefreshFragment<ThemeNewsBean, ThemePresenter>
-       {
+        RefreshFragment<ThemeNewsBean, ThemePresenter> {
 
     private ImageView mThemePageHeader;
 

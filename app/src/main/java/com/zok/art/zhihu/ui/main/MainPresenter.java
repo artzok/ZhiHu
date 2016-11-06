@@ -1,16 +1,21 @@
 package com.zok.art.zhihu.ui.main;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.api.ApiManager;
 import com.zok.art.zhihu.api.ApiService;
+import com.zok.art.zhihu.base.BaseFragment;
 import com.zok.art.zhihu.bean.SectionBean;
 import com.zok.art.zhihu.bean.SectionListBean;
 import com.zok.art.zhihu.bean.ThemeItemBean;
 import com.zok.art.zhihu.bean.ThemeListBean;
+import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.ui.home.HomeFragment;
 import com.zok.art.zhihu.ui.section.SectionFragment;
 import com.zok.art.zhihu.ui.sections.SectionsFragment;
@@ -36,21 +41,18 @@ public class MainPresenter implements Presenter {
 
     private View mView;
     private ApiService mService;
-    private Fragment mHomePageFragment;
-    private SectionsFragment mSectionsFragment;
     private List<ThemeItemBean> mThemeItemBeen;
-    private SparseArray<Fragment> mThemeFragments;
+
+    // 四大Fragment
+    private BaseFragment mHomePageFragment;
+    private BaseFragment mSectionsFragment;
+    private BaseFragment mThemeFragment;
+    private BaseFragment mSectionFragment;
 
     public MainPresenter() {
-        this(null);
-    }
-
-    public MainPresenter(Intent intent) {
         mService = ApiManager.getApiService();
         mHomePageFragment = HomeFragment.newInstance();
         mSectionsFragment = SectionsFragment.newInstance();
-        mThemeFragments = new SparseArray<>();
-
     }
 
     @Override
@@ -72,19 +74,10 @@ public class MainPresenter implements Presenter {
     public void switchHome() {
         // update title
         mView.updateTitle(AppUtil.getString(R.string.menu_home_tip));
+
         // fragment trans
         mView.replaceFragment(mHomePageFragment);
     }
-
-    @Override
-    public void switchTheme(int position) {
-        // update theme title
-        ThemeItemBean bean = mThemeItemBeen.get(position);
-        mView.updateTitle(bean.getName());
-        // fragment trans
-        mView.replaceFragment(getThemeFragment(position));
-    }
-
 
     @Override
     public void switchSections() {
@@ -93,18 +86,36 @@ public class MainPresenter implements Presenter {
     }
 
     @Override
-    public void switchSection(SectionBean bean) {
-        SectionFragment fragment = SectionFragment.newInstance(bean);
-        mView.replaceFragment(fragment);
+    public void switchTheme(int position) {
+        // update theme title
+        ThemeItemBean bean = mThemeItemBeen.get(position);
+        mView.updateTitle(bean.getName());
+
+        // fragment trans
+        if(mThemeFragment == null) {
+            mThemeFragment = ThemeFragment.newInstance(bean);
+        } else {
+            Bundle bundle = getBundle(bean);
+            mThemeFragment.getPresenter().setParams(bundle);
+        }
+        mView.replaceFragment(mThemeFragment);
     }
 
-    private Fragment getThemeFragment(int i) {
-        Fragment fragment = mThemeFragments.get(i);
-        if (fragment == null) {
-            fragment = ThemeFragment.newInstance(mThemeItemBeen.get(i));
-            mThemeFragments.put(i, fragment);
+    @Override
+    public void switchSection(SectionBean bean) {
+        if(mSectionFragment == null) {
+            mSectionFragment = SectionFragment.newInstance(bean);
+        } else {
+            mSectionFragment.getPresenter().setParams(getBundle(bean));
         }
-        return fragment;
+        mView.replaceFragment(mSectionFragment);
+    }
+
+    @NonNull
+    private Bundle getBundle(Parcelable bean) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.EXTRA_INIT_PARAMS, bean);
+        return bundle;
     }
 
     private void loadThemes() {

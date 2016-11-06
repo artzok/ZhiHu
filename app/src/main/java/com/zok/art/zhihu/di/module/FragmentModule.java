@@ -31,21 +31,24 @@ public class FragmentModule {
 
     @Provides
     public HomePresenter provideHomePagePresenter() {
-        HomePresenter presenter = new HomePresenter(initParams);
+        HomePresenter presenter = new HomePresenter();
+        presenter.setParams(initParams);
         presenter.attachView((HomeFragment) mFragment);
         return presenter;
     }
 
     @Provides
     public ThemePresenter provideThemePagePresenter() {
-        ThemePresenter presenter = new ThemePresenter(initParams);
+        ThemePresenter presenter = new ThemePresenter();
+        presenter.setParams(initParams);
         presenter.attachView((ThemeFragment) mFragment);
         return presenter;
     }
 
     @Provides
     public SectionPresenter provideSectionPagePresenter() {
-        SectionPresenter presenter = new SectionPresenter(initParams);
+        SectionPresenter presenter = new SectionPresenter();
+        presenter.setParams(initParams);
         presenter.attachView((SectionFragment) mFragment);
         return presenter;
     }

@@ -27,7 +27,8 @@ import butterknife.BindView;
  * @author 赵坤
  * @email artzok@163.com
  */
-public class CollectedActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public class CollectedActivity extends BaseActivity
+        implements AdapterView.OnItemClickListener {
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
@@ -47,10 +48,6 @@ public class CollectedActivity extends BaseActivity implements AdapterView.OnIte
     @Override
     protected int getLayoutResId() {
         return R.layout.activity_collected;
-    }
-
-    @Override
-    protected void initInject() {
     }
 
     @Override
@@ -83,7 +80,6 @@ public class CollectedActivity extends BaseActivity implements AdapterView.OnIte
         mBeen = instance.queryAllCollected();
         updateEmptyView();
 
-
         // set and update
         mAdapter.setDataAndRefresh(mBeen);
     }
@@ -94,11 +90,6 @@ public class CollectedActivity extends BaseActivity implements AdapterView.OnIte
             mEmptyView.setVisibility(View.VISIBLE);
         }
     }
-
-    @Override
-    public void showError(String msg, Throwable e) {
-    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

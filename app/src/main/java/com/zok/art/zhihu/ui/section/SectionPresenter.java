@@ -23,10 +23,6 @@ import rx.Observable;
  */
 public class SectionPresenter extends RefreshPresenter<SectionNewsBean, SectionFragment, SectionBean> {
 
-    public SectionPresenter(Bundle initParams) {
-        super(initParams);
-    }
-
     @Override
     protected Observable<SectionNewsBean> getLatestObservable(ApiService apiService, SectionBean params) {
         return apiService.getSectionNews(params.getId());

@@ -2,6 +2,7 @@ package com.zok.art.zhihu.base;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +21,8 @@ import butterknife.ButterKnife;
  * @author 赵坤
  * @email artzok@163.com
  */
-public abstract class BaseFragment<T extends BasePresenter>
-        extends Fragment implements BaseView {
+public abstract class BaseFragment<T extends BaseFragmentContract.Presenter>
+        extends Fragment implements BaseFragmentContract.View {
     // log utils
     protected final LogUtil log = LogUtil.getLogUtil(getClass());
     // p 层
@@ -30,7 +31,9 @@ public abstract class BaseFragment<T extends BasePresenter>
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(getLayoutResId(), container, false);
         // 绑定视图对象
         ButterKnife.bind(this, view);
@@ -55,5 +58,42 @@ public abstract class BaseFragment<T extends BasePresenter>
         return DaggerFragmentComponent.builder()
                 .fragmentModule(new FragmentModule(this, getArguments()))
                 .build();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopUpdate();
+    }
+
+    @Override
+    public void stopUpdate() {
+        if (mPresenter != null)
+            mPresenter.stopUpdate();
+    }
+
+    @Override
+    public void reStartUpdate() {
+        if (mPresenter != null)
+            mPresenter.reStartUpdate();
+    }
+
+    @Override
+    public void showError(String msg, Throwable e) {
+        log.d(msg + ":" + e.getMessage());
+        View view = getView();
+        if(view != null)
+        Snackbar.make(view, msg, 2000).setAction("重试",
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mPresenter.start();
+                    }
+                }).show();
+    }
+
+    @Override
+    public T getPresenter() {
+        return getPresenter();
     }
 }

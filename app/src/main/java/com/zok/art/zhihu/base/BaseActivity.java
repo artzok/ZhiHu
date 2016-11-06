@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -61,6 +62,7 @@ public abstract class BaseActivity<T extends BasePresenter>
      * 沉浸式标志
      */
     private boolean isImmersion;
+    private View mView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,7 +88,8 @@ public abstract class BaseActivity<T extends BasePresenter>
     /*初始化窗口布局*/
     private void initWindowUI() {
         // 设置布局
-        setContentView(getLayoutResId());
+        mView = getLayoutInflater().inflate(getLayoutResId(), null);
+        setContentView(mView);
 
         // 绑定控件
         mUnBinder = ButterKnife.bind(this);
@@ -100,9 +103,10 @@ public abstract class BaseActivity<T extends BasePresenter>
     protected abstract int getLayoutResId();
 
     /**
-     * 子类必须实现该方法并添加注入代码
+     * 子类应该重载该方法并添加注入代码
      */
-    protected abstract void initInject();
+    protected void initInject() {
+    }
 
     /**
      * Dagger2注入工具对象
@@ -116,7 +120,10 @@ public abstract class BaseActivity<T extends BasePresenter>
 
     /*请求权限*/
     private void requestPermissions() {
+        // 获得权限字符串数组
         final String[] permissions = AppUtil.getStrArr(getPermissionArrId());
+
+        // 判断系统是不是大于等于M
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean result = true;
             for (String permission : permissions) {
@@ -143,16 +150,20 @@ public abstract class BaseActivity<T extends BasePresenter>
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         List<String> failed = new ArrayList<>();
-        // check permission and add filed item
+
+        // 检查权限请求结果
         for (int i = 0; i < permissions.length; i++) {
             if (grantResults[i] != GRAND)
                 failed.add(permissions[i]);
         }
-        // notify subclass request failed
+
+        // 报告每个请求失败的权限
         if (!failed.isEmpty()) {
             requestPermissionFailed(failed);
             return;
         }
+
+        // 权限请求成功
         requestPermissionSucceed();
     }
 
@@ -176,6 +187,9 @@ public abstract class BaseActivity<T extends BasePresenter>
         return R.array.basic_permissions;
     }
 
+    /**
+     * 日间和夜景模式切换
+     */
     protected void switchNightMode() {
         boolean isNight = !(Boolean) AppUtil.getGlobal(DAY_NIGHT_MODE, false);
         setDefaultNightMode(isNight ? MODE_NIGHT_YES : MODE_NIGHT_NO);
@@ -183,6 +197,11 @@ public abstract class BaseActivity<T extends BasePresenter>
         recreate();
     }
 
+    /**
+     * 判断当前的模式
+     *
+     * @return true表示夜景模式
+     */
     protected boolean isNightMode() {
         return (boolean) AppUtil.getGlobal(DAY_NIGHT_MODE, false);
     }
@@ -208,6 +227,18 @@ public abstract class BaseActivity<T extends BasePresenter>
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+    }
+
+    @Override
+    public void showError(String msg, Throwable e) {
+        log.d(msg + ":" + e.getMessage());
+        Snackbar.make(mView, msg, 2000).setAction("重试",
+                new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.start();
+            }
+        }).show();
     }
 
     @Override

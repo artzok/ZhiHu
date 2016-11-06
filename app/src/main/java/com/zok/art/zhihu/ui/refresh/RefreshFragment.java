@@ -45,12 +45,6 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
     }
 
     @Override
-    public void showError(String msg, Throwable e) {
-        ToastUtil.show(getActivity(), msg);
-        log.e(msg + ":" + e.getMessage());
-    }
-
-    @Override
     protected void initialize() {
         initSubView();
         // start presenter logic
@@ -102,22 +96,6 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
     @Override
     public void onRefresh() {
         mPresenter.updateLatest();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mPresenter != null)
-            mPresenter.resume();
-        //mNewsListView.smoothScrollToPositionFromTop(0, 0, 200);
-        mNewsListView.setSelection(0);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (mPresenter != null)
-            mPresenter.pause();
     }
 
     @Override

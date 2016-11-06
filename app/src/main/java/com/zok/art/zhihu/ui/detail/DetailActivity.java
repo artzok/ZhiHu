@@ -82,7 +82,6 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
 
     @Override
     protected void requestPermissionSucceed() {
-
         initDecorate();
         configWebView();
         setListener();
@@ -158,12 +157,22 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
                 break;
             case R.id.menu_collect:
                 mPresenter.setCollected(!mPresenter.isCollected());
+                if(v.isSelected()) {
+                    ToastUtil.show(this, "取消成功", R.drawable.collect);
+                } else {
+                    ToastUtil.show(this, "收藏成功", R.drawable.collected);
+                }
                 break;
             case R.id.menu_comment:
                 goToCommentActivity();
                 break;
             case R.id.menu_praise:
                 mPresenter.setPraised(!mPresenter.isPraised());
+                if(v.isSelected()) {
+                    ToastUtil.show(this, "取消点赞", R.drawable.praise);
+                } else {
+                    ToastUtil.show(this, "点赞成功", R.drawable.praised);
+                }
                 break;
         }
         v.setSelected(!v.isSelected());
@@ -182,13 +191,6 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
         intent.putExtra(CommentActivity.EXTRA_COMMENT_INFO, extraBean);
         startActivity(intent);
         overridePendingTransition(R.anim.trans_enter_anim, R.anim.trans_exit_anim);
-    }
-
-    @Override
-    public void showError(String msg, Throwable e) {
-        e.printStackTrace();
-        ToastUtil.show(this, msg);
-        log.d(msg + ":" + e.toString());
     }
 
     @Override

@@ -21,6 +21,10 @@ public class SectionFragment extends RefreshFragment<SectionNewsBean, SectionPre
         return fragment;
     }
 
+    public SectionPresenter getPresenter() {
+        return mPresenter;
+    }
+
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);

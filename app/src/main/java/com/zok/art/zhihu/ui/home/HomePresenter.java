@@ -17,12 +17,7 @@ import rx.Observable;
  * @author 赵坤
  * @email artzok@163.com
  */
-public class HomePresenter extends RefreshPresenter<StoriesLatestBean, HomeFragment, Object>
-        {
-
-    public HomePresenter(Bundle initParams) {
-        super(initParams);
-    }
+public class HomePresenter extends RefreshPresenter<StoriesLatestBean, HomeFragment, Object> {
 
     @Override
     protected Observable<StoriesLatestBean> getLatestObservable(ApiService apiService, Object params) {

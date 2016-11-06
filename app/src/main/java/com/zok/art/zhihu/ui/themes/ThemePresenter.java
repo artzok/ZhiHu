@@ -19,10 +19,6 @@ import rx.Observable;
 public class ThemePresenter extends
         RefreshPresenter<ThemeNewsBean, ThemeFragment, ThemeItemBean> {
 
-    public ThemePresenter(Bundle initParams) {
-        super(initParams);
-    }
-
     @Override
     protected Observable<ThemeNewsBean>
     getLatestObservable(ApiService apiService, ThemeItemBean params) {

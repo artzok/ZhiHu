@@ -32,11 +32,7 @@ public class SectionsFragment extends BaseFragment<SectionsContract.Presenter>
 
     @BindView(R.id.sections_view)
     public RecyclerView mSectionsView;
-
     private SectionsAdapter mSectionsAdapter;
-    private Subscription mSubscribe;
-
-
 
     @Override
     protected int getLayoutResId() {
@@ -46,11 +42,6 @@ public class SectionsFragment extends BaseFragment<SectionsContract.Presenter>
     @Override
     protected void initInject() {
         getFragmentComponent().inject(this);
-    }
-
-    @Override
-    public void showError(String msg, Throwable e) {
-
     }
 
     @Override
@@ -74,12 +65,9 @@ public class SectionsFragment extends BaseFragment<SectionsContract.Presenter>
 
     @Override
     public void onClick(View v, int position) {
-//        Intent intent = new Intent(getActivity(), SectionActivity.class);
         SectionBean item = mSectionsAdapter.getItem(position);
         MainActivity activity = (MainActivity) getActivity();
         activity.goSection(item);
-//        intent.putExtra(Constants.EXTRA_INIT_PARAMS, item);
-//        startActivity(intent);
     }
 
     @Override

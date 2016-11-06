@@ -84,6 +84,11 @@ public class DetailPresenter implements DetailContract.Presenter {
                                                 e.printStackTrace();
                                             }
                                         }
+                                    }, new Action1<Throwable>() {
+                                        @Override
+                                        public void call(Throwable throwable) {
+                                            mView.showError(AppUtil.getString(R.string.load_failed), throwable);
+                                        }
                                     });
                         }
                     }

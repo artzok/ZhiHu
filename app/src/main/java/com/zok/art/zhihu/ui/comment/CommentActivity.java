@@ -27,6 +27,7 @@ import butterknife.BindView;
  */
 public class CommentActivity extends BaseActivity<CommentContract.Presenter>
         implements CommentContract.View, AdapterView.OnItemClickListener {
+
     public static final String EXTRA_NEWS_ID = "extra_news_id";
     public static final String EXTRA_COMMENT_INFO = "extra_comment_info";
 
@@ -53,6 +54,7 @@ public class CommentActivity extends BaseActivity<CommentContract.Presenter>
 
     @Override
     protected void requestPermissionSucceed() {
+        requestImmersion();
         initDecorate();
         initAdapter();
         initListener();
@@ -87,20 +89,11 @@ public class CommentActivity extends BaseActivity<CommentContract.Presenter>
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-        }
+        if (item.getItemId() == android.R.id.home)
+            onBackPressed();
         return true;
     }
     /*-------------------------------------------------------------------------*/
-
-    @Override
-    public void showError(String msg, Throwable e) {
-        ToastUtil.show(this, msg);
-        log.d(msg + ":" + e.getMessage());
-    }
 
     @Override
     public void updateTitle(String title) {

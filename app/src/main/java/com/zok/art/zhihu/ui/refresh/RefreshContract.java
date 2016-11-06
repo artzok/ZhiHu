@@ -1,8 +1,8 @@
 package com.zok.art.zhihu.ui.refresh;
 
-import com.zok.art.zhihu.base.BasePresenter;
-import com.zok.art.zhihu.base.BaseView;
-import com.zok.art.zhihu.bean.BasicStoryBean;
+import android.os.Bundle;
+
+import com.zok.art.zhihu.base.BaseFragmentContract;
 import com.zok.art.zhihu.bean.StoryListItemBean;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface RefreshContract {
 
-    interface View<M> extends BaseView {
+    interface View<M> extends BaseFragmentContract.View {
         void openRefreshUI();
 
         void closeRefreshUI();
@@ -23,10 +23,7 @@ public interface RefreshContract {
         void updateNewsList(List<StoryListItemBean> bean);
     }
 
-    interface Presenter<M, V extends View<M>> extends BasePresenter<V> {
-        void pause();
-
-        void resume();
+    interface Presenter<M, V extends View<M>> extends BaseFragmentContract.Presenter<V> {
 
         void updateLatest();
 

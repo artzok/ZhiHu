@@ -95,6 +95,7 @@ public class CommentPresenter implements CommentContract.Presenter {
                     @Override
                     public void call(Throwable throwable) {
                         mView.showError(AppUtil.getString(R.string.load_failed), throwable);
+                        mView.closeProgressBar();
                     }
                 });
     }
@@ -128,6 +129,7 @@ public class CommentPresenter implements CommentContract.Presenter {
                     @Override
                     public void call(Throwable throwable) {
                         mView.showError(AppUtil.getString(R.string.load_failed), throwable);
+                        mView.closeProgressBar();
                     }
                 });
     }

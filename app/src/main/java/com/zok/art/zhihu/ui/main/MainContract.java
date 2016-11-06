@@ -1,7 +1,6 @@
 package com.zok.art.zhihu.ui.main;
 
-import android.support.v4.app.Fragment;
-
+import com.zok.art.zhihu.base.BaseFragment;
 import com.zok.art.zhihu.base.BasePresenter;
 import com.zok.art.zhihu.base.BaseView;
 import com.zok.art.zhihu.bean.SectionBean;
@@ -31,7 +30,7 @@ public interface MainContract {
          * 替换Fragment实例
          * @param instance fragment实例
          */
-        void replaceFragment(Fragment instance);
+        void replaceFragment(BaseFragment instance);
 
     }
 
