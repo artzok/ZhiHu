@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 
 import com.zok.art.zhihu.utils.CastUtil;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 import butterknife.ButterKnife;

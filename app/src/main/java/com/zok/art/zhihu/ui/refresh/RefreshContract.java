@@ -1,7 +1,5 @@
 package com.zok.art.zhihu.ui.refresh;
 
-import android.os.Bundle;
-
 import com.zok.art.zhihu.base.BaseFragmentContract;
 import com.zok.art.zhihu.bean.StoryListItemBean;
 
@@ -30,8 +28,6 @@ public interface RefreshContract {
         void updateBefore();
 
         List<StoryListItemBean> getListBeans(M mode);
-
-        String getTitle();
 
         void setReadState(StoryListItemBean bean);
     }

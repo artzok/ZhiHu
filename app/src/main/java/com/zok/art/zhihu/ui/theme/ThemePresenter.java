@@ -1,6 +1,4 @@
-package com.zok.art.zhihu.ui.themes;
-
-import android.os.Bundle;
+package com.zok.art.zhihu.ui.theme;
 
 import com.zok.art.zhihu.api.ApiService;
 import com.zok.art.zhihu.bean.StoryListItemBean;
@@ -22,7 +20,7 @@ public class ThemePresenter extends
     @Override
     protected Observable<ThemeNewsBean>
     getLatestObservable(ApiService apiService, ThemeItemBean params) {
-        return apiService.getTheTheme(params.getId());
+        return apiService.getSpecificTheme(params.getId());
     }
 
     @Override
@@ -32,6 +30,6 @@ public class ThemePresenter extends
 
     @Override
     public String getTitle() {
-        return mLatestData.getName();
+        return mInitParams.getName();
     }
 }

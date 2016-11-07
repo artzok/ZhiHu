@@ -4,11 +4,6 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
-import io.realm.RealmModel;
-import io.realm.RealmObject;
-import io.realm.annotations.RealmClass;
 
 /**
  * @author 赵坤
@@ -72,8 +67,7 @@ public class BasicStoryBean implements ITitleBean, Parcelable {
 
         if (type != that.type) return false;
         if (id != that.id) return false;
-        if (ga_prefix != null && !ga_prefix.equals(that.ga_prefix)) return false;
-        return title.equals(that.title);
+        return !(ga_prefix != null && !ga_prefix.equals(that.ga_prefix)) && title.equals(that.title);
     }
 
 
@@ -91,10 +85,10 @@ public class BasicStoryBean implements ITitleBean, Parcelable {
         dest.writeByte(this.isRead ? (byte) 1 : (byte) 0);
     }
 
-     BasicStoryBean() {
+    BasicStoryBean() {
     }
 
-     BasicStoryBean(Parcel in) {
+    BasicStoryBean(Parcel in) {
         this.type = in.readInt();
         this.id = in.readLong();
         this.ga_prefix = in.readString();

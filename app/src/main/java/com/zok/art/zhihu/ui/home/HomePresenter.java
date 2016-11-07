@@ -1,7 +1,5 @@
 package com.zok.art.zhihu.ui.home;
 
-import android.os.Bundle;
-
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.api.ApiService;
 import com.zok.art.zhihu.bean.StoriesLatestBean;
@@ -21,7 +19,7 @@ public class HomePresenter extends RefreshPresenter<StoriesLatestBean, HomeFragm
 
     @Override
     protected Observable<StoriesLatestBean> getLatestObservable(ApiService apiService, Object params) {
-        return apiService.latestNewsStories();
+        return apiService.getLatestNews();
     }
 
     @Override

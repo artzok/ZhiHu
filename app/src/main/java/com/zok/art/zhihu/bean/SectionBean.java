@@ -3,11 +3,13 @@ package com.zok.art.zhihu.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.zok.art.zhihu.inter.ICardItem;
+
 /**
  * @author 赵坤
  * @email artzok@163.com
  */
-public class SectionBean implements Parcelable {
+public class SectionBean implements Parcelable, ICardItem {
 
     private String description;
     private long id;

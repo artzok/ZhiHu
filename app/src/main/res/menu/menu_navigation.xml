@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group
+        android:checkableBehavior="single"
+        android:title="@string/menu_news">
+        <item
+            android:id="@+id/nav_home"
+            android:checked="true"
+            android:icon="@drawable/menu_home"
+            android:title="@string/menu_home_tip"/>
+        <item
+            android:id="@+id/nav_themes"
+            android:icon="@drawable/menu_zhihu"
+            android:title="@string/menu_themes_tips"/>
+        <item
+            android:id="@+id/nav_sections"
+            android:icon="@drawable/menu_sections"
+            android:title="@string/menu_sections_tips"/>
+    </group>
+
+    <item android:title="@string/menu_options">
+        <menu>
+            <item
+                android:checkable="true"
+                android:id="@+id/nav_collected"
+                android:icon="@drawable/menu_collected"
+                android:title="@string/menu_collected_tips"/>
+            <item
+                android:id="@+id/nav_night"
+                app:actionLayout="@layout/night_switch"
+                android:icon="@drawable/menu_night"
+                android:title="@string/menu_night_tips"/>
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/menu_setting"
+                android:title="@string/menu_setting_tips"/>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/menu_about"
+                android:title="@string/menu_about_tips"/>
+        </menu>
+    </item>
+</menu>

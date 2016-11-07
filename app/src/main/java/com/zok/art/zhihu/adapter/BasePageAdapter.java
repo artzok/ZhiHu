@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import com.zok.art.zhihu.bean.ITitleBean;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 

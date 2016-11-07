@@ -1,34 +1,18 @@
 package com.zok.art.zhihu.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.util.SparseArray;
 
-import com.zok.art.zhihu.R;
-import com.zok.art.zhihu.api.ApiManager;
-import com.zok.art.zhihu.api.ApiService;
 import com.zok.art.zhihu.base.BaseFragment;
 import com.zok.art.zhihu.bean.SectionBean;
-import com.zok.art.zhihu.bean.SectionListBean;
 import com.zok.art.zhihu.bean.ThemeItemBean;
-import com.zok.art.zhihu.bean.ThemeListBean;
 import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.ui.home.HomeFragment;
 import com.zok.art.zhihu.ui.section.SectionFragment;
 import com.zok.art.zhihu.ui.sections.SectionsFragment;
-import com.zok.art.zhihu.ui.themes.ThemeFragment;
-import com.zok.art.zhihu.utils.AppUtil;
-
-import java.util.List;
-
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import com.zok.art.zhihu.ui.theme.ThemeFragment;
+import com.zok.art.zhihu.ui.themes.ThemesFragment;
 
 import static com.zok.art.zhihu.ui.main.MainContract.Presenter;
 import static com.zok.art.zhihu.ui.main.MainContract.View;
@@ -38,21 +22,19 @@ import static com.zok.art.zhihu.ui.main.MainContract.View;
  * @email artzok@163.com
  */
 public class MainPresenter implements Presenter {
-
     private View mView;
-    private ApiService mService;
-    private List<ThemeItemBean> mThemeItemBeen;
 
     // 四大Fragment
     private BaseFragment mHomePageFragment;
     private BaseFragment mSectionsFragment;
     private BaseFragment mThemeFragment;
     private BaseFragment mSectionFragment;
+    private BaseFragment mThemesFragment;
 
     public MainPresenter() {
-        mService = ApiManager.getApiService();
         mHomePageFragment = HomeFragment.newInstance();
         mSectionsFragment = SectionsFragment.newInstance();
+        mThemesFragment = ThemesFragment.newInstance();
     }
 
     @Override
@@ -67,31 +49,27 @@ public class MainPresenter implements Presenter {
 
     @Override
     public void start() {
-        loadThemes();
+
     }
 
     @Override
     public void switchHome() {
-        // update title
-        mView.updateTitle(AppUtil.getString(R.string.menu_home_tip));
-
         // fragment trans
         mView.replaceFragment(mHomePageFragment);
     }
 
     @Override
+    public void switchThemes() {
+        mView.replaceFragment(mThemesFragment);
+    }
+
+    @Override
     public void switchSections() {
-        mView.updateTitle("旧版栏目");
         mView.replaceFragment(mSectionsFragment);
     }
 
     @Override
-    public void switchTheme(int position) {
-        // update theme title
-        ThemeItemBean bean = mThemeItemBeen.get(position);
-        mView.updateTitle(bean.getName());
-
-        // fragment trans
+    public void switchTheme(ThemeItemBean bean) {
         if(mThemeFragment == null) {
             mThemeFragment = ThemeFragment.newInstance(bean);
         } else {
@@ -116,25 +94,5 @@ public class MainPresenter implements Presenter {
         Bundle bundle = new Bundle();
         bundle.putParcelable(Constants.EXTRA_INIT_PARAMS, bean);
         return bundle;
-    }
-
-    private void loadThemes() {
-        mService.newestThemes()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<ThemeListBean>() {
-                    @Override
-                    public void call(ThemeListBean themeListBean) {
-                        mThemeItemBeen = themeListBean.getOthers();
-                        if (mView != null)
-                            mView.updateThemeList(mThemeItemBeen);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        if (mView != null)
-                            mView.showError("Load themes error!", throwable);
-                    }
-                });
     }
 }

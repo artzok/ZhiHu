@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.support.v7.app.ActionBar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.base.BaseActivity;
 import com.zok.art.zhihu.ui.main.MainActivity;
-import com.zok.art.zhihu.utils.ToastUtil;
 
 import butterknife.BindView;
 

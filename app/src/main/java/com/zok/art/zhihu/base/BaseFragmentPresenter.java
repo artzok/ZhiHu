@@ -1,8 +1,5 @@
 package com.zok.art.zhihu.base;
 
-import com.zok.art.zhihu.ui.sections.SectionsContract;
-import com.zok.art.zhihu.utils.RxJavaUtils;
-
 /**
  * @author 赵坤
  * @email artzok@163.com

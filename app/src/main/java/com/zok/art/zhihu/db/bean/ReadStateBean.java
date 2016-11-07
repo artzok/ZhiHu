@@ -1,12 +1,6 @@
 package com.zok.art.zhihu.db.bean;
 
-import com.zok.art.zhihu.bean.BasicStoryBean;
-
-import java.util.List;
-
-import io.realm.RealmList;
 import io.realm.RealmObject;
-import io.realm.annotations.Ignore;
 
 /**
  * @author 赵坤

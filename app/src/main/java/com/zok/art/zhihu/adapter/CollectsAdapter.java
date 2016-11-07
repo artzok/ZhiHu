@@ -8,10 +8,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.zok.art.zhihu.R;
-import com.zok.art.zhihu.bean.StoryListItemBean;
 import com.zok.art.zhihu.db.bean.ReadStateBean;
-
-import java.util.List;
 
 import butterknife.BindView;
 

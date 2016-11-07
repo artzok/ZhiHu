@@ -3,10 +3,10 @@ package com.zok.art.zhihu.ui.detail;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,7 +19,6 @@ import com.tencent.smtt.sdk.WebViewClient;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.base.BaseActivity;
 import com.zok.art.zhihu.bean.NewsExtraBean;
-import com.zok.art.zhihu.db.RealmManager;
 import com.zok.art.zhihu.ui.comment.CommentActivity;
 import com.zok.art.zhihu.utils.ToastUtil;
 
@@ -91,7 +90,10 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
     private void initDecorate() {
         setSupportActionBar(mToolbar);
         mToolbar.setTitleTextColor(Color.WHITE);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
 
         // 初始化ActionView
         mCommentCount.setText("...");

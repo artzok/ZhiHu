@@ -83,7 +83,7 @@ public class SplashPresenter implements Presenter {
 
     private void updateSplashCache() {
         if (!NetWorkUtil.isNetWorkAvailable(AppUtil.getAppContext())) return;
-        mUpdateSubscribe = mService.getSplash().subscribeOn(Schedulers.io())
+        mUpdateSubscribe = mService.getSplashImage().subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Action1<SplashBean>() {
                     @Override

@@ -7,9 +7,9 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by artzok on 2016/9/23.
+ * @author 赵坤
+ * @email artzok@163.com
  */
-
 public class LogUtil {
     public static final int LOG_NONE = 0;
     public static final int LOG_VERBOSE = 1;
@@ -21,7 +21,7 @@ public class LogUtil {
     /* date formatter */
     private static SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm:ss", Locale.CHINA);
 
-    /* global log level and defaut value is LOG_ERROR */
+    /* global log level and default value is LOG_ERROR */
     private static int GLOBAL_LOG_LEVEL = LOG_ERROR;
 
     /* current class log level */

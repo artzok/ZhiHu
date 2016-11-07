@@ -14,11 +14,11 @@
         android:orientation="vertical">
         <!--Status Bar : compromise method -->
         <ImageView
-            android:contentDescription="@string/image_description"
             android:id="@+id/status_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"/>
+            android:background="@color/colorPrimary"
+            android:contentDescription="@string/image_description"/>
         <!--TooBar use to navigate -->
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -37,17 +37,12 @@
 
     </LinearLayout>
 
-    <!--Left drawer navigation for all item -->
-    <FrameLayout
-        android:id="@+id/left_drawer_container"
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_menus"
+        android:layout_gravity="start"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="?android:attr/colorBackground"
-        android:choiceMode="singleChoice"
-        android:dividerHeight="1dp">
+        app:headerLayout="@layout/left_drawer_top"
+        app:menu="@menu/menu_navigation"/>
 
-        <!--navigation content-->
-        <include layout="@layout/left_drawer_content"/>
-    </FrameLayout>
 </android.support.v4.widget.DrawerLayout>

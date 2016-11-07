@@ -1,14 +1,12 @@
 package com.zok.art.zhihu.ui.home;
 
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.MotionEvent;
 import android.view.View;
 
 import com.art.zok.autoview.AutoViewPager;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.adapter.BannerPageAdapter;
 import com.zok.art.zhihu.bean.StoriesLatestBean;
-import com.zok.art.zhihu.bean.StoryBannerItemBean;
 import com.zok.art.zhihu.ui.refresh.RefreshFragment;
 
 public class HomeFragment extends RefreshFragment<StoriesLatestBean, HomePresenter>

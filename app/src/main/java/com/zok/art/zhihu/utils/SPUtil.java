@@ -9,9 +9,9 @@ import android.content.SharedPreferences;
 
 import com.zok.art.zhihu.config.Constants;
 
-
 /**
- * Created by artzok on 2016/9/6.
+ * @author 赵坤
+ * @email artzok@163.com
  */
 public class SPUtil {
 

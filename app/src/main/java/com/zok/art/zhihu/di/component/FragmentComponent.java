@@ -4,7 +4,8 @@ import com.zok.art.zhihu.di.module.FragmentModule;
 import com.zok.art.zhihu.ui.home.HomeFragment;
 import com.zok.art.zhihu.ui.section.SectionFragment;
 import com.zok.art.zhihu.ui.sections.SectionsFragment;
-import com.zok.art.zhihu.ui.themes.ThemeFragment;
+import com.zok.art.zhihu.ui.theme.ThemeFragment;
+import com.zok.art.zhihu.ui.themes.ThemesFragment;
 
 import dagger.Component;
 
@@ -15,7 +16,8 @@ import dagger.Component;
 @Component(modules = FragmentModule.class)
 public interface FragmentComponent {
     void inject(HomeFragment fragment);
-    void inject(ThemeFragment fragment);
     void inject(SectionsFragment fragment);
     void inject(SectionFragment fragment);
+    void inject(ThemeFragment fragment);
+    void inject(ThemesFragment fragment);
 }

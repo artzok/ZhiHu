@@ -1,13 +1,14 @@
 package com.zok.art.zhihu.adapter;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.zok.art.zhihu.R;
-import com.zok.art.zhihu.bean.SectionBean;
+import com.zok.art.zhihu.inter.ICardItem;
 
 import butterknife.BindView;
 
@@ -15,7 +16,7 @@ import butterknife.BindView;
  * @author 赵坤
  * @email artzok@163.com
  */
-public class SectionsAdapter extends BaseRecyclerAdapter<SectionBean> {
+public class SectionsAdapter<T extends ICardItem> extends BaseRecyclerAdapter<T> {
 
     @Override
     int getItemLayoutResId() {
@@ -27,7 +28,7 @@ public class SectionsAdapter extends BaseRecyclerAdapter<SectionBean> {
         return new SectionViewHolder(itemView);
     }
 
-    public class SectionViewHolder extends BaseRecyclerViewHolder<SectionBean> {
+    public class SectionViewHolder extends BaseRecyclerViewHolder<T> {
         @BindView(R.id.image_section)
         public ImageView icon;
 
@@ -42,8 +43,11 @@ public class SectionsAdapter extends BaseRecyclerAdapter<SectionBean> {
         }
 
         @Override
-        public void fillData(SectionBean data) {
-            Picasso.with(itemView.getContext()).load(data.getThumbnail()).into(icon);
+        public void fillData(T data) {
+            Log.d("tag", "fillData: "+data.getThumbnail());
+            String thumbnail = data.getThumbnail();
+            if (!TextUtils.isEmpty(thumbnail))
+                Picasso.with(itemView.getContext()).load(thumbnail).into(icon);
             title.setText(data.getName());
             String text = data.getDescription();
             if (!TextUtils.isEmpty(text)) {

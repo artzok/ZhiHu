@@ -7,10 +7,12 @@ import com.zok.art.zhihu.ui.home.HomeFragment;
 import com.zok.art.zhihu.ui.home.HomePresenter;
 import com.zok.art.zhihu.ui.section.SectionFragment;
 import com.zok.art.zhihu.ui.section.SectionPresenter;
-import com.zok.art.zhihu.ui.sections.SectionsContract;
+import com.zok.art.zhihu.ui.sections.SectionsFragment;
 import com.zok.art.zhihu.ui.sections.SectionsPresenter;
-import com.zok.art.zhihu.ui.themes.ThemeFragment;
-import com.zok.art.zhihu.ui.themes.ThemePresenter;
+import com.zok.art.zhihu.ui.theme.ThemeFragment;
+import com.zok.art.zhihu.ui.theme.ThemePresenter;
+import com.zok.art.zhihu.ui.themes.ThemesFragment;
+import com.zok.art.zhihu.ui.themes.ThemesPresenter;
 
 import dagger.Module;
 import dagger.Provides;
@@ -54,9 +56,16 @@ public class FragmentModule {
     }
 
     @Provides
-    public SectionsContract.Presenter provideSectionsPresenter() {
+    public SectionsPresenter provideSectionsPresenter() {
         SectionsPresenter presenter = new SectionsPresenter();
-        presenter.attachView((SectionsContract.View) mFragment);
+        presenter.attachView((SectionsFragment) mFragment);
+        return presenter;
+    }
+
+    @Provides
+    public ThemesPresenter provideThemesPresenter() {
+        ThemesPresenter presenter = new ThemesPresenter();
+        presenter.attachView((ThemesFragment) mFragment);
         return presenter;
     }
 }

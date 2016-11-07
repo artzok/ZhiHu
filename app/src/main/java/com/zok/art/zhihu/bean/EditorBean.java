@@ -63,7 +63,6 @@ public  class EditorBean {
         if (bio != null ? !bio.equals(that.bio) : that.bio != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
         return url != null ? url.equals(that.url) : that.url == null;
-
     }
 }
 

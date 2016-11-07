@@ -2,6 +2,7 @@ package com.zok.art.zhihu.ui.collected;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +13,6 @@ import android.widget.ListView;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.adapter.CollectsAdapter;
 import com.zok.art.zhihu.base.BaseActivity;
-import com.zok.art.zhihu.bean.StoryListItemBean;
 import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.db.RealmManager;
 import com.zok.art.zhihu.db.bean.ReadStateBean;
@@ -61,7 +61,10 @@ public class CollectedActivity extends BaseActivity
         mToolbar.setTitle("收藏");
         mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
 
         // set click event
         mCollectsView.setOnItemClickListener(this);
@@ -86,7 +89,7 @@ public class CollectedActivity extends BaseActivity
 
     private void updateEmptyView() {
         // hide empty view
-        if(mBeen == null || mBeen.size() == 0) {
+        if (mBeen == null || mBeen.size() == 0) {
             mEmptyView.setVisibility(View.VISIBLE);
         }
     }

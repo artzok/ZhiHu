@@ -62,7 +62,7 @@ public class DetailPresenter implements DetailContract.Presenter {
     }
 
     private void loadContent(final ApiService apiService) {
-        Observable<NewsDetailBean> observable = apiService.newsDetails(mStoryBean.getId());
+        Observable<NewsDetailBean> observable = apiService.getNewsDetails(mStoryBean.getId());
         mSubscription = observable.subscribeOn(Schedulers.io())
                 .filter(new Func1<NewsDetailBean, Boolean>() {
                     @Override
@@ -74,7 +74,7 @@ public class DetailPresenter implements DetailContract.Presenter {
                     public void call(final NewsDetailBean newsDetailBean) {
                         // 部分新闻为空，需要重试
                         if (TextUtils.isEmpty(newsDetailBean.getHtmlBody())) {
-                            apiService.getData(newsDetailBean.getShareUrl())
+                            apiService.getRaw(newsDetailBean.getShareUrl())
                                     .subscribe(new Action1<ResponseBody>() {
                                         @Override
                                         public void call(ResponseBody responseBody) {

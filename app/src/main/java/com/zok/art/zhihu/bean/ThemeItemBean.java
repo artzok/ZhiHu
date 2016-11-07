@@ -3,15 +3,17 @@ package com.zok.art.zhihu.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.zok.art.zhihu.inter.ICardItem;
+
 /**
  * @author 赵坤
  * @email artzok@163.com
  */
-public class ThemeItemBean implements Parcelable {
+public class ThemeItemBean implements ICardItem, Parcelable {
     private int color;
     private String thumbnail;
     private String description;
-    private int id;
+    private long id;
     private String name;
 
     public ThemeItemBean() {
@@ -41,11 +43,11 @@ public class ThemeItemBean implements Parcelable {
         this.description = description;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -79,7 +81,7 @@ public class ThemeItemBean implements Parcelable {
         dest.writeInt(this.color);
         dest.writeString(this.thumbnail);
         dest.writeString(this.description);
-        dest.writeInt(this.id);
+        dest.writeLong(this.id);
         dest.writeString(this.name);
     }
 
@@ -87,7 +89,7 @@ public class ThemeItemBean implements Parcelable {
         this.color = in.readInt();
         this.thumbnail = in.readString();
         this.description = in.readString();
-        this.id = in.readInt();
+        this.id = in.readLong();
         this.name = in.readString();
     }
 

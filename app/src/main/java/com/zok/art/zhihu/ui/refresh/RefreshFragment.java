@@ -11,12 +11,9 @@ import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.adapter.NewsListAdapter;
 import com.zok.art.zhihu.base.BaseApplication;
 import com.zok.art.zhihu.base.BaseFragment;
-import com.zok.art.zhihu.bean.BasicStoryBean;
 import com.zok.art.zhihu.bean.StoryListItemBean;
 import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.ui.detail.DetailActivity;
-import com.zok.art.zhihu.ui.main.MainActivity;
-import com.zok.art.zhihu.utils.ToastUtil;
 
 import java.util.List;
 
@@ -28,7 +25,8 @@ import butterknife.BindView;
  */
 public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
         extends BaseFragment<P> implements RefreshContract.View<M>,
-        SwipeRefreshLayout.OnRefreshListener, AbsListView.OnScrollListener, AdapterView.OnItemClickListener {
+        SwipeRefreshLayout.OnRefreshListener, AbsListView.OnScrollListener,
+        AdapterView.OnItemClickListener {
 
     @BindView(R.id.pull_refresh_view)
     protected SwipeRefreshLayout mRefreshLayout;
@@ -106,7 +104,6 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
-
     }
 
     @Override
@@ -122,13 +119,11 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
         // modify action bar title
         int firstVisiblePosition = mNewsListView.getFirstVisiblePosition();
         StoryListItemBean bean = (StoryListItemBean) mNewsAdapter.getItem(firstVisiblePosition);
-        MainActivity activity = (MainActivity) getActivity();
         if (bean.isDate()) {
-            activity.updateTitle(bean.getDateString());
+            updateTitle(bean.getDateString());
         } else if (firstVisibleItem == 0) {
-            activity.updateTitle(mPresenter.getTitle());
+            updateTitle(mPresenter.getTitle());
         }
-
     }
 
     @Override

@@ -2,41 +2,37 @@ package com.zok.art.zhihu.ui.main;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.zok.art.zhihu.R;
-import com.zok.art.zhihu.adapter.DrawerListAdapter;
 import com.zok.art.zhihu.base.BaseActivity;
 import com.zok.art.zhihu.base.BaseFragment;
 import com.zok.art.zhihu.base.BaseFragmentContract;
 import com.zok.art.zhihu.bean.SectionBean;
 import com.zok.art.zhihu.bean.ThemeItemBean;
-import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.ui.collected.CollectedActivity;
 import com.zok.art.zhihu.ui.home.HomeFragment;
 import com.zok.art.zhihu.utils.AppUtil;
 
-import java.util.List;
-
 import butterknife.BindView;
-import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity<MainContract.Presenter>
-        implements MainContract.View, AdapterView.OnItemClickListener {
+        implements MainContract.View, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private ActionBarDrawerToggle mToggle;
 
@@ -49,23 +45,16 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     @BindView(R.id.left_drawer)
     public DrawerLayout mLeftDrawer;
 
-    @BindView(R.id.lv_left_drawer_list)
-    public ListView mLvLeftDrawerList;          // 主题列表
+    @BindView(R.id.nav_menus)
+    public NavigationView mNavigationView;
 
-    @BindView(R.id.iv_left_drawer_image)
-    public ImageView mAccountImage;             // 头像
+    public ImageView mUserImage;        // 用户头像
 
-    @BindView(R.id.tv_left_drawer_login_tip)
-    public TextView mLoginTips;                 // 请登录
+    public TextView mLoginTips;
 
-    @BindView(R.id.ll_left_drawer_favorites)    // 我的收藏
-    public LinearLayout mFavoritesBtn;
-
-    @BindView(R.id.ll_left_drawer_download)
-    public LinearLayout mDownloadBtn;           // 离线下载
-
-    private DrawerListAdapter mDrawerListAdapter;
     private FragmentManager mFragmentManager;
+    private MenuItem mNightMenuItem;
+    private SwitchCompat mNightModeSwitch;
 
 
     @Override
@@ -90,25 +79,9 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem item = menu.findItem(R.id.action_day_night);
-        if (item != null) {
-            boolean isNight = isNightMode();
-            item.setTitle(isNight ? R.string.action_day : R.string.action_night);
-            return true;
-        }
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        // 夜景切换
-        if (id == R.id.action_day_night) {
-            switchNightMode();
-        }
-        // 侧边导航显示
-        else if (id == android.R.id.home) {
+        if (id == android.R.id.home) {
             mToggle.onOptionsItemSelected(item);
         }
         return true;
@@ -116,7 +89,6 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
 
     @Override
     protected void requestPermissionSucceed() {
-
         // 获得Fragment管理器
         mFragmentManager = getSupportFragmentManager();
 
@@ -125,9 +97,6 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
 
         // 初始化侧边导航
         initDrawer();
-
-        // 设置监听器
-        setListener();
 
         // 启动PRESENTER层逻辑
         mPresenter.start();
@@ -145,63 +114,106 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         setSupportActionBar(mToolbar);
 
         // toggle与DrawerLayout关联
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToggle = new ActionBarDrawerToggle(this, mLeftDrawer,
-                R.string.open_drawer_desc, R.string.close_drawer_desc);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        mToggle = new ActionBarDrawerToggle(this, mLeftDrawer, R.string.open_drawer_desc, R.string.close_drawer_desc);
         mLeftDrawer.setDrawerListener(mToggle);
         mToggle.syncState();
     }
 
     private void initDrawer() {
-        // 为侧边栏添加头部
-        View headView = getLayoutInflater().inflate(R.layout.left_drawer_head, null);
-        mLvLeftDrawerList.addHeaderView(headView);
+        // 登录部分控件
+        View view = mNavigationView.getHeaderView(0);
+        mUserImage = (ImageView) view.findViewById(R.id.user_image);
+        mLoginTips = (TextView) view.findViewById(R.id.login_tips);
 
-        // 为导航列表设置适配器
-        mDrawerListAdapter = new DrawerListAdapter(this);
-        mLvLeftDrawerList.setAdapter(mDrawerListAdapter);
-    }
+        // 导航监听
+        mNavigationView.setNavigationItemSelectedListener(this);
 
-    private void setListener() {
-        // 为侧边导航列表设置适配器
-        mLvLeftDrawerList.setOnItemClickListener(this);
-    }
-
-    @Override
-    public void updateTitle(String title) {
-        mToolbar.setTitle(title);
+        // 夜景模式菜单
+        mNightMenuItem = mNavigationView.getMenu().findItem(R.id.nav_night);
+        mNightModeSwitch = (SwitchCompat) mNightMenuItem.getActionView();
+        mNightModeSwitch.setOnClickListener(this);
     }
 
     @Override
-    public void updateThemeList(List<ThemeItemBean> themes) {
-        // 刷新主题列表
-        mDrawerListAdapter.setDataAndRefresh(themes);
+    public void onClick(View v) {
+        int titleId = mNightModeSwitch.isChecked() ?
+                R.string.menu_day_tips : R.string.menu_night_tips;
+        mNightMenuItem.setTitle(AppUtil.getString(titleId));
+        switchNightMode();
+    }
 
-        // 根据全局参数替换Fragment
-        Integer page = (Integer) AppUtil.getGlobal(Constants.LAST_SCAN_THEME, 0);
-        if (page != -1) {
-            mLvLeftDrawerList.performItemClick(null, page, 0);
-        } else {
-            goSections();
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.nav_home:
+                goHome();               // 进入主页列表
+                break;
+            case R.id.nav_themes:
+                goThemes();             // 进入主题列表
+                break;
+            case R.id.nav_sections:
+                goSections();           // 进入栏目列表
+                break;
+            case R.id.nav_collected:
+                goCollectedActivity();  // 进入收藏页面
+                break;
+            case R.id.nav_setting:
+                // TODO: 2016/11/7 设置页面
+                break;
+            case R.id.nav_about:
+                // TODO: 2016/11/7 关于页面
+                break;
         }
+        return true;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // update theme list's select state
-        mLvLeftDrawerList.setSelection(position);
+    /*进入主页列表*/
+    private void goHome() {
+        closeDrawer();
+        mPresenter.switchHome();
+    }
 
-        // set global flag variable that mark the last position of themes list
-        AppUtil.putGlobal(Constants.LAST_SCAN_THEME, position);
+    /*进入主题列表*/
+    private void goThemes() {
+        closeDrawer();
+        mPresenter.switchThemes();
+    }
 
-        // close left drawer
+    /*进入栏目列表*/
+    private void goSections() {
+        closeDrawer();
+        mPresenter.switchSections();
+    }
+
+    /*进入收藏页面*/
+    private void goCollectedActivity() {
+        Intent favorites = new Intent(this, CollectedActivity.class);
+        startActivity(favorites);
+    }
+
+    /*进入指定主题列表*/
+    public void goTheme(ThemeItemBean bean) {
+        mPresenter.switchTheme(bean);
+    }
+
+    /*进入指定栏目列表*/
+    public void goSection(SectionBean bean) {
+        closeDrawer();
+        mPresenter.switchSection(bean);
+    }
+
+    /*关闭侧边导航*/
+    private void closeDrawer() {
         mLeftDrawer.closeDrawer(GravityCompat.START);
+    }
 
-        // notify presenter
-        if (position == 0)
-            mPresenter.switchHome();
-        else
-            mPresenter.switchTheme(position - 1);
+    /*判断导航是否打开*/
+    private boolean isDrawerOpen() {
+        return mLeftDrawer.isDrawerOpen(GravityCompat.START);
     }
 
     @Override
@@ -215,7 +227,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
 
             if (addedFragment != null) {
-                ((BaseFragment)addedFragment).stopUpdate();
+                ((BaseFragment) addedFragment).stopUpdate();
                 transaction.hide(addedFragment);
             }
 
@@ -225,7 +237,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
                 transaction.add(R.id.fragment_container, cachedFragment, hashCode);
             } else {
                 transaction.show(cachedFragment);
-                ((BaseFragmentContract.View)cachedFragment).reStartUpdate();
+                ((BaseFragmentContract.View) cachedFragment).reStartUpdate();
             }
             transaction.addToBackStack(hashCode);
             transaction.commit();
@@ -251,10 +263,8 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
 
     @Override
     public void onBackPressed() {
-
-        // close left navigation
-        if (mLeftDrawer.isDrawerOpen(GravityCompat.START)) {
-            mLeftDrawer.closeDrawer(GravityCompat.START);
+        if (isDrawerOpen()) {
+            closeDrawer();
             return;
         }
 
@@ -263,39 +273,14 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         if (forehand == null || forehand.getClass() == HomeFragment.class) {
             finish();
         } else {
-            // mPresenter.switchHome();
-            mLvLeftDrawerList.performItemClick(null, 0, 0);
+            mPresenter.switchHome();
         }
     }
 
-    @OnClick({R.id.btn_sections, R.id.ll_left_drawer_favorites})
-    public void onNavigateClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_sections:
-                goSections();
-                break;
-            case R.id.ll_left_drawer_favorites:
-                Intent favorites = new Intent(this, CollectedActivity.class);
-                startActivity(favorites);
-                break;
-        }
+
+    @Override
+    public void updateTitle(String title) {
+        mToolbar.setTitle(title);
     }
 
-    private void goSections() {
-        // close left drawer
-        mLeftDrawer.closeDrawer(GravityCompat.START);
-        // set global flag variable that mark the last position of themes list
-        AppUtil.putGlobal(Constants.LAST_SCAN_THEME, -1);
-        // switch sections
-        mPresenter.switchSections();
-    }
-
-    public void goSection(SectionBean bean) {
-        // close left drawer
-        mLeftDrawer.closeDrawer(GravityCompat.START);
-        // set global flag variable that mark the last position of themes list
-        AppUtil.putGlobal(Constants.LAST_SCAN_THEME, -1);
-        // switch sections
-        mPresenter.switchSection(bean);
-    }
 }

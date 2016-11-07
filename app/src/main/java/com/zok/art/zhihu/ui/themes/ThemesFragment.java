@@ -1,6 +1,6 @@
-package com.zok.art.zhihu.ui.sections;
+package com.zok.art.zhihu.ui.themes;
 
-import com.zok.art.zhihu.bean.SectionBean;
+import com.zok.art.zhihu.bean.ThemeItemBean;
 import com.zok.art.zhihu.inter.ICardItem;
 import com.zok.art.zhihu.ui.card.CardFragment;
 import com.zok.art.zhihu.ui.main.MainActivity;
@@ -9,16 +9,15 @@ import com.zok.art.zhihu.ui.main.MainActivity;
  * @author 赵坤
  * @email artzok@163.com
  */
-public class SectionsFragment extends CardFragment<SectionsPresenter> {
-
-    public static SectionsFragment newInstance() {
-        return new SectionsFragment();
+public class ThemesFragment extends CardFragment<ThemesPresenter> {
+    public static ThemesFragment newInstance() {
+        return new ThemesFragment();
     }
 
     @Override
     public void onItemClick(MainActivity activity, ICardItem iCardItem) {
-        SectionBean item = (SectionBean) iCardItem;
-        activity.goSection(item);
+        ThemeItemBean item = (ThemeItemBean) iCardItem;
+        activity.goTheme(item);
     }
 
     @Override

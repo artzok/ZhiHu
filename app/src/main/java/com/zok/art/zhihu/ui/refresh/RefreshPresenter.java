@@ -1,7 +1,6 @@
 package com.zok.art.zhihu.ui.refresh;
 
 import android.os.Bundle;
-import android.os.Looper;
 
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.api.ApiManager;
@@ -57,6 +56,7 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
 
     @Override
     public void start() {
+        mView.updateTitle(getTitle());
         updateLatest();
     }
 
@@ -157,7 +157,7 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
     protected abstract Observable<M> getLatestObservable(ApiService apiService, P params);
 
     protected Observable<StoriesBeforeBean> getBeforeObservable(ApiService apiService, P params, Date date) {
-        return mApiService.beforeNews(DateUtil.formatDate(date, "yyyyMMdd"));
+        return mApiService.getBeforeNews(DateUtil.formatDate(date, "yyyyMMdd"));
     }
 
 

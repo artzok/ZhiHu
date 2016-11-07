@@ -1,8 +1,5 @@
 package com.zok.art.zhihu.utils;
 
-import android.text.TextUtils;
-import android.util.Log;
-
 import java.util.List;
 
 /**

@@ -2,7 +2,6 @@ package com.zok.art.zhihu.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.widget.EditText;
 
 import java.io.File;
 import java.io.FileNotFoundException;

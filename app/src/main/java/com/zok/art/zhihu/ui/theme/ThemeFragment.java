@@ -1,4 +1,4 @@
-package com.zok.art.zhihu.ui.themes;
+package com.zok.art.zhihu.ui.theme;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,7 +9,6 @@ import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.bean.ThemeItemBean;
 import com.zok.art.zhihu.bean.ThemeNewsBean;
 import com.zok.art.zhihu.config.Constants;
-import com.zok.art.zhihu.ui.refresh.RefreshContract;
 import com.zok.art.zhihu.ui.refresh.RefreshFragment;
 
 /**

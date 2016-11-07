@@ -15,7 +15,6 @@ import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.adapter.CommentListAdapter;
 import com.zok.art.zhihu.base.BaseActivity;
 import com.zok.art.zhihu.bean.CommentItemBean;
-import com.zok.art.zhihu.utils.ToastUtil;
 
 import java.util.List;
 
