@@ -2,8 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <group
-        android:checkableBehavior="single"
-        android:title="@string/menu_news">
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
             android:checked="true"
@@ -22,13 +21,12 @@
     <item android:title="@string/menu_options">
         <menu>
             <item
-                android:checkable="true"
                 android:id="@+id/nav_collected"
                 android:icon="@drawable/menu_collected"
                 android:title="@string/menu_collected_tips"/>
             <item
                 android:id="@+id/nav_night"
-                app:actionLayout="@layout/night_switch"
+                app:actionLayout="@layout/night_mode_switch"
                 android:icon="@drawable/menu_night"
                 android:title="@string/menu_night_tips"/>
             <item

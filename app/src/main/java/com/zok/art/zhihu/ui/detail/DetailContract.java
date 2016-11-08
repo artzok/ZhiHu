@@ -3,6 +3,7 @@ package com.zok.art.zhihu.ui.detail;
 import com.zok.art.zhihu.base.BasePresenter;
 import com.zok.art.zhihu.base.BaseView;
 import com.zok.art.zhihu.bean.BasicStoryBean;
+import com.zok.art.zhihu.bean.NewsDetailBean;
 import com.zok.art.zhihu.bean.NewsExtraBean;
 
 /**
@@ -15,6 +16,11 @@ public interface DetailContract {
          * 显示加载进度条，关闭进度条由WebView实现
          */
         void showProgress();
+
+        /**
+         * 隐藏加载进度条
+         */
+        void closeProgress();
 
         /**
          * 更新头部图片
@@ -50,7 +56,6 @@ public interface DetailContract {
          * @param bean
          */
         void updateExtra(NewsExtraBean bean);
-
     }
 
     interface Presenter extends BasePresenter<View> {
@@ -75,6 +80,8 @@ public interface DetailContract {
         void setCollected(boolean collected);
 
         void setPraised(boolean praised);
+
+        NewsDetailBean getNewsDetail();
     }
 
 }

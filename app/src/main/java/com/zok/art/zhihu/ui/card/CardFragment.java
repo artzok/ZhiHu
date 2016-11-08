@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.adapter.BaseRecyclerAdapter;
-import com.zok.art.zhihu.adapter.SectionsAdapter;
+import com.zok.art.zhihu.adapter.CardAdapter;
 import com.zok.art.zhihu.base.BaseFragment;
 import com.zok.art.zhihu.inter.ICardItem;
 import com.zok.art.zhihu.ui.main.MainActivity;
@@ -26,7 +26,7 @@ public abstract class CardFragment<T extends CardContract.Presenter> extends Bas
 
     @BindView(R.id.card_view)
     public RecyclerView mCardView;
-    private SectionsAdapter mCardAdapter;
+    private CardAdapter mCardAdapter;
 
     @Override
     protected int getLayoutResId() {
@@ -42,7 +42,7 @@ public abstract class CardFragment<T extends CardContract.Presenter> extends Bas
         mCardView.setLayoutManager(new StaggeredGridLayoutManager(2, VERTICAL));
 
         // set adapter
-        mCardAdapter = new SectionsAdapter();
+        mCardAdapter = new CardAdapter();
         mCardView.setAdapter(mCardAdapter);
 
         // set item click listener

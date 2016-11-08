@@ -30,7 +30,7 @@ public abstract class CardPresenter<T extends ICardItem> extends BaseFragmentPre
 
     @Override
     public void start() {
-        mView.updateTitle(getTitle());
+//        mView.updateTitle(getTitle());
         loadCards();
     }
 

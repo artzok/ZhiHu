@@ -25,6 +25,7 @@ import com.zok.art.zhihu.base.BaseFragment;
 import com.zok.art.zhihu.base.BaseFragmentContract;
 import com.zok.art.zhihu.bean.SectionBean;
 import com.zok.art.zhihu.bean.ThemeItemBean;
+import com.zok.art.zhihu.ui.about.AboutActivity;
 import com.zok.art.zhihu.ui.collected.CollectedActivity;
 import com.zok.art.zhihu.ui.home.HomeFragment;
 import com.zok.art.zhihu.utils.AppUtil;
@@ -32,15 +33,14 @@ import com.zok.art.zhihu.utils.AppUtil;
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity<MainContract.Presenter>
-        implements MainContract.View, NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements MainContract.View,
+        NavigationView.OnNavigationItemSelectedListener,
+        View.OnClickListener {
 
     private ActionBarDrawerToggle mToggle;
 
     @BindView(R.id.toolbar)
     public Toolbar mToolbar;
-
-    @BindView(R.id.status_bar)
-    public ImageView mStatusBar;
 
     @BindView(R.id.left_drawer)
     public DrawerLayout mLeftDrawer;
@@ -48,7 +48,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     @BindView(R.id.nav_menus)
     public NavigationView mNavigationView;
 
-    public ImageView mUserImage;        // 用户头像
+    public ImageView mUserImage;        // TODO: 2016/11/8 登录功能
 
     public TextView mLoginTips;
 
@@ -84,6 +84,9 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         if (id == android.R.id.home) {
             mToggle.onOptionsItemSelected(item);
         }
+        if(id == android.R.id.message) {
+            // TODO: 2016/11/8 消息推送功能
+        }
         return true;
     }
 
@@ -104,11 +107,6 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
 
 
     private void initDecorate() {
-        // 设置状态栏高度
-        int height = AppUtil.getStatusHeight(this);
-        mStatusBar.setMinimumHeight(height);
-        mStatusBar.setMaxHeight(height);
-
         // 设置ActionBar
         mToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(mToolbar);
@@ -135,16 +133,20 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         mNightMenuItem = mNavigationView.getMenu().findItem(R.id.nav_night);
         mNightModeSwitch = (SwitchCompat) mNightMenuItem.getActionView();
         mNightModeSwitch.setOnClickListener(this);
+        // 初始化菜单文字
+        updateNightModeText();
+        mNightModeSwitch.setChecked(isNightMode());
+    }
+
+    private void updateNightModeText() {
+        int titleId = isNightMode() ? R.string.menu_day_tips : R.string.menu_night_tips;
+        mNightMenuItem.setTitle(AppUtil.getString(titleId));
     }
 
     @Override
     public void onClick(View v) {
-        int titleId = mNightModeSwitch.isChecked() ?
-                R.string.menu_day_tips : R.string.menu_night_tips;
-        mNightMenuItem.setTitle(AppUtil.getString(titleId));
         switchNightMode();
     }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -165,7 +167,8 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
                 // TODO: 2016/11/7 设置页面
                 break;
             case R.id.nav_about:
-                // TODO: 2016/11/7 关于页面
+                // TODO: 2016/11/8 完善关于页面
+                goAboutActivity();      // 进入关于页面
                 break;
         }
         return true;
@@ -206,6 +209,12 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         mPresenter.switchSection(bean);
     }
 
+    /*进入关于页面*/
+    private void goAboutActivity() {
+        Intent aboutActivity = new Intent(this, AboutActivity.class);
+        startActivity(aboutActivity);
+    }
+
     /*关闭侧边导航*/
     private void closeDrawer() {
         mLeftDrawer.closeDrawer(GravityCompat.START);
@@ -221,13 +230,14 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         try {
             String hashCode = Integer.toString(instance.hashCode());
 
-            Fragment addedFragment = getForehand();
+            BaseFragment addedFragment = (BaseFragment) getForehand();
 
             // start transaction
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
 
             if (addedFragment != null) {
-                ((BaseFragment) addedFragment).stopUpdate();
+                addedFragment.stopUpdate();
+                addedFragment.onPause();
                 transaction.hide(addedFragment);
             }
 
@@ -236,6 +246,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
                 cachedFragment = instance;
                 transaction.add(R.id.fragment_container, cachedFragment, hashCode);
             } else {
+                cachedFragment.onResume();
                 transaction.show(cachedFragment);
                 ((BaseFragmentContract.View) cachedFragment).reStartUpdate();
             }
@@ -246,7 +257,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         }
     }
 
-
+    /*获得前台显示的Fragment实例*/
     private Fragment getForehand() {
         int count = mFragmentManager.getBackStackEntryCount();
         Fragment addedFragment = null;
@@ -273,14 +284,12 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         if (forehand == null || forehand.getClass() == HomeFragment.class) {
             finish();
         } else {
-            mPresenter.switchHome();
+            goHome();
         }
     }
-
 
     @Override
     public void updateTitle(String title) {
         mToolbar.setTitle(title);
     }
-
 }

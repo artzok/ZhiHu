@@ -5,9 +5,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.api.ApiManager;
 import com.zok.art.zhihu.api.ApiService;
+import com.zok.art.zhihu.bean.BingSplashBean;
 import com.zok.art.zhihu.bean.SplashBean;
 import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.utils.AppUtil;
@@ -16,9 +18,13 @@ import com.zok.art.zhihu.utils.NetWorkUtil;
 import com.zok.art.zhihu.utils.SPUtil;
 import com.zok.art.zhihu.utils.StringUtil;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
+import io.realm.internal.android.JsonUtils;
 import okhttp3.ResponseBody;
+import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -35,11 +41,6 @@ public class SplashPresenter implements Presenter {
     private ApiService mService;
     private Subscription mUpdateSubscribe;
     private Subscription mLoadSubscribe;
-
-    public SplashPresenter(){}
-
-    public SplashPresenter(Intent intent) {
-    }
 
     @Override
     public void attachView(View view) {
@@ -83,23 +84,59 @@ public class SplashPresenter implements Presenter {
 
     private void updateSplashCache() {
         if (!NetWorkUtil.isNetWorkAvailable(AppUtil.getAppContext())) return;
-        mUpdateSubscribe = mService.getSplashImage().subscribeOn(Schedulers.io())
+        int anInt = SPUtil.getInt(Constants.SPLASH_IMAGE_ORIGIN);
+//        switch (anInt) {
+//            case Constants.ZHIHU_SPLASH:
+//                mUpdateSubscribe = loadSplash(mService.getSplashImage(),
+//                        new ZhihuSplashAction());
+//                break;
+//            case Constants.BIND_SPLASH:
+                mUpdateSubscribe = loadSplash(mService.getRaw(ApiService.BIND_SPLASH_URL),
+                        new BingSplashAction());
+//                break;
+//        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private Subscription loadSplash(Observable observable, Action1 action1) {
+        return observable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<SplashBean>() {
-                    @Override
-                    public void call(SplashBean splashBean) {
-                        // update splash author
-                        SPUtil.putString(Constants.SPLASH_IMAGE_AUTHOR, splashBean.getAuthor());
-                        // update bitmap
-                        loadNewestSplashBitmap(splashBean.getImageUrl());
-                    }
-                }, new Action1<Throwable>() {
+                .subscribe(action1, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         mSplashView.showError(AppUtil.getString(R.string.load_failed), throwable);
                     }
                 });
+    }
 
+    private class ZhihuSplashAction implements Action1<SplashBean> {
+        @Override
+        public void call(SplashBean splashBean) {
+            // update splash author
+            SPUtil.putString(Constants.SPLASH_IMAGE_AUTHOR, splashBean.getAuthor());
+            // update bitmap
+            loadNewestSplashBitmap(splashBean.getImageUrl());
+        }
+    }
+
+    private class BingSplashAction implements Action1<ResponseBody> {
+        @Override
+        public void call(ResponseBody responseBody) {
+            try {
+                String string = responseBody.string();
+                BingSplashBean bean = AppUtil.getGson().fromJson(string, BingSplashBean.class);
+                List<BingSplashBean.ImagesBean> images = bean.getImages();
+                if (images != null && images.size() > 0) {
+                    // update splash author
+                    BingSplashBean.ImagesBean imagesBean = images.get(0);
+                    SPUtil.putString(Constants.SPLASH_IMAGE_AUTHOR, imagesBean.getCopyright());
+                    // update bitmap
+                    loadNewestSplashBitmap(imagesBean.getUrl());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void loadNewestSplashBitmap(String imageUrl) {

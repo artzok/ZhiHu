@@ -2,23 +2,22 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="148dp"
+    android:layout_height="198dp"
     android:background="@color/colorPrimary"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingTop="32dp">
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_centerVertical="true"
         android:id="@+id/user_image"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:src="@drawable/account_avatar"/>
 
     <TextView
         android:id="@+id/login_tips"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="56dp"
         android:layout_alignTop="@+id/user_image"
         android:layout_toEndOf="@+id/user_image"
         android:layout_toRightOf="@+id/user_image"
@@ -27,5 +26,5 @@
         android:paddingRight="15dp"
         android:text="@string/login_tip"
         android:textColor="@color/plainFontColor"
-        android:textSize="16sp"/>
+        android:textSize="18sp"/>
 </RelativeLayout>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#42a8df</color>
-    <color name="colorPrimaryDark">#7aaff5</color>
+    <color name="colorPrimaryDark">#42a8df</color>
     <color name="colorAccent">#e10bab</color>
 
     <color name="plainFontColor">#ffffff</color>
@@ -11,4 +11,5 @@
     <color name="primary_text">@android:color/darker_gray</color>
     <color name="comment_divider_color">#aaa</color>
     <color name="light_grey">#D7D7D7</color>
+    <color name="md_pink">#f744c4</color>
 </resources>

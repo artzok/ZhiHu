@@ -26,7 +26,6 @@ import butterknife.BindView;
  */
 public class CommentActivity extends BaseActivity<CommentContract.Presenter>
         implements CommentContract.View, AdapterView.OnItemClickListener {
-
     public static final String EXTRA_NEWS_ID = "extra_news_id";
     public static final String EXTRA_COMMENT_INFO = "extra_comment_info";
 
@@ -53,7 +52,7 @@ public class CommentActivity extends BaseActivity<CommentContract.Presenter>
 
     @Override
     protected void requestPermissionSucceed() {
-        requestImmersion();
+//        requestImmersion();
         initDecorate();
         initAdapter();
         initListener();

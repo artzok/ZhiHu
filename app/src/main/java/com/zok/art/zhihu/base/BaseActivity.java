@@ -12,11 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.zok.art.zhihu.R;
+import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.di.component.ActivityComponent;
 import com.zok.art.zhihu.di.component.DaggerActivityComponent;
 import com.zok.art.zhihu.di.module.ActivityModule;
 import com.zok.art.zhihu.utils.AppUtil;
 import com.zok.art.zhihu.utils.LogUtil;
+import com.zok.art.zhihu.utils.SPUtil;
 import com.zok.art.zhihu.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -37,9 +39,6 @@ import static android.support.v7.app.AppCompatDelegate.setDefaultNightMode;
  */
 public abstract class BaseActivity<T extends BasePresenter>
         extends AppCompatActivity implements BaseView {
-
-    /*日间/夜景 模式记录键值*/
-    private static final String DAY_NIGHT_MODE = "day_night_mode";
 
     /*运行时权限成功授权码*/
     private static final int GRAND = PackageManager.PERMISSION_GRANTED;
@@ -191,9 +190,9 @@ public abstract class BaseActivity<T extends BasePresenter>
      * 日间和夜景模式切换
      */
     protected void switchNightMode() {
-        boolean isNight = !(Boolean) AppUtil.getGlobal(DAY_NIGHT_MODE, false);
+        boolean isNight = !SPUtil.getBoolean(Constants.DAY_NIGHT_MODE);
         setDefaultNightMode(isNight ? MODE_NIGHT_YES : MODE_NIGHT_NO);
-        AppUtil.putGlobal(DAY_NIGHT_MODE, isNight);
+        SPUtil.putBoolean(Constants.DAY_NIGHT_MODE, isNight);
         recreate();
     }
 
@@ -203,7 +202,7 @@ public abstract class BaseActivity<T extends BasePresenter>
      * @return true表示夜景模式
      */
     protected boolean isNightMode() {
-        return (boolean) AppUtil.getGlobal(DAY_NIGHT_MODE, false);
+        return SPUtil.getBoolean(Constants.DAY_NIGHT_MODE);
     }
 
     /**
@@ -231,6 +230,7 @@ public abstract class BaseActivity<T extends BasePresenter>
 
     @Override
     public void showError(String msg, Throwable e) {
+        e.printStackTrace();
         log.d(msg + ":" + e.getMessage());
         Snackbar.make(mView, msg, 2000).setAction("重试",
                 new View.OnClickListener() {
@@ -247,5 +247,6 @@ public abstract class BaseActivity<T extends BasePresenter>
         if (mPresenter != null)
             mPresenter.detachView();
         mUnBinder.unbind();
+        BaseApplication.sWatcher.watch(this);
     }
 }

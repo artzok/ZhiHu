@@ -74,7 +74,7 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
             convertView = LayoutInflater.from(getContext()).inflate(itemLayoutId, parent, false);
             holder = createViewHolder(itemViewType, convertView);
             convertView.setTag(holder);
-            // import to subclass cache
+            // IMPORT：subclass maybe cache view holder and item view
             convertView = holder.itemView;
         }
         holder = CastUtil.cast(convertView.getTag());

@@ -10,6 +10,7 @@ import com.zok.art.zhihu.bean.ThemeItemBean;
 import com.zok.art.zhihu.bean.ThemeNewsBean;
 import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.ui.refresh.RefreshFragment;
+import com.zok.art.zhihu.utils.ImageLoaderManager;
 
 /**
  * @author 赵坤
@@ -49,6 +50,7 @@ public class ThemeFragment extends
 
     @Override
     public void updateBanner(ThemeNewsBean storiesBean) {
-        Picasso.with(getContext()).load(storiesBean.getImage()).into(mThemePageHeader);
+//        Picasso.with(getContext()).load(storiesBean.getImage()).into(mThemePageHeader);
+        ImageLoaderManager.loadHeaderImage(getContext(), mThemePageHeader, storiesBean.getImage());
     }
 }

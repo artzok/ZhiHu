@@ -7,9 +7,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.bean.StoryBannerItemBean;
+import com.zok.art.zhihu.utils.ImageLoaderManager;
 
 /**
  * @author 赵坤
@@ -23,7 +23,7 @@ public class BannerPageAdapter extends BasePageAdapter<StoryBannerItemBean> {
 
     @Override
     protected int getItemLayoutId() {
-        return R.layout.home_page_banner;
+        return R.layout.home_banner_item;
     }
 
     @Override
@@ -39,6 +39,6 @@ public class BannerPageAdapter extends BasePageAdapter<StoryBannerItemBean> {
         title.setText(bean.getTitle());
 
         // load image and set title
-        Picasso.with(getContext()).load(bean.getImageUrl()).into(image);
+        ImageLoaderManager.loadBannerItemImage(getContext(), image, bean.getImageUrl());
     }
 }

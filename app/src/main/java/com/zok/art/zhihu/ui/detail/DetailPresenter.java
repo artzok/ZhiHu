@@ -36,6 +36,7 @@ public class DetailPresenter implements DetailContract.Presenter {
     private NewsExtraBean mNewsExtra;
     private StoryListItemBean mStoryBean;
     private RealmManager mInstance;
+    private NewsDetailBean mNewsDetail;
 
     public DetailPresenter(Intent intent) {
         mStoryBean = intent.getParcelableExtra(Constants.EXTRA_INIT_PARAMS);
@@ -104,6 +105,7 @@ public class DetailPresenter implements DetailContract.Presenter {
                 .subscribe(new Action1<NewsDetailBean>() {
                     @Override
                     public void call(NewsDetailBean bean) {
+                        mNewsDetail = bean;
                         String html = HtmlUtil.createHtmlData(bean.getHtmlBody(),
                                 bean.getCss(), bean.getJavaScripts());
                         mView.updateWebView(html);
@@ -173,6 +175,11 @@ public class DetailPresenter implements DetailContract.Presenter {
     @Override
     public void setPraised(boolean praised) {
         mInstance.setPraised(mStoryBean, praised);
+    }
+
+    @Override
+    public NewsDetailBean getNewsDetail() {
+        return mNewsDetail;
     }
 
 

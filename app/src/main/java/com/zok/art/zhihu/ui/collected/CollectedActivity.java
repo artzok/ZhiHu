@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.zok.art.zhihu.R;
-import com.zok.art.zhihu.adapter.CollectsAdapter;
+import com.zok.art.zhihu.adapter.CollectedAdapter;
 import com.zok.art.zhihu.base.BaseActivity;
 import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.db.RealmManager;
@@ -36,13 +36,10 @@ public class CollectedActivity extends BaseActivity
     @BindView(R.id.lv_collects)
     public ListView mCollectsView;
 
-    @BindView(R.id.status_bar)
-    public ImageView mStatusBar;
-
     @BindView(R.id.empty_view)
     public View mEmptyView;
 
-    private CollectsAdapter mAdapter;
+    private CollectedAdapter mAdapter;
     private List<ReadStateBean> mBeen;
 
     @Override
@@ -52,11 +49,6 @@ public class CollectedActivity extends BaseActivity
 
     @Override
     protected void requestPermissionSucceed() {
-        // set status bar height
-        int height = AppUtil.getStatusHeight(this);
-        mStatusBar.setMaxHeight(height);
-        mStatusBar.setMinimumHeight(height);
-
         // set action bar
         mToolbar.setTitle("收藏");
         mToolbar.setTitleTextColor(Color.WHITE);
@@ -70,7 +62,7 @@ public class CollectedActivity extends BaseActivity
         mCollectsView.setOnItemClickListener(this);
 
         // set adapter
-        mAdapter = new CollectsAdapter(this);
+        mAdapter = new CollectedAdapter(this);
         mCollectsView.setAdapter(mAdapter);
 
         // update content

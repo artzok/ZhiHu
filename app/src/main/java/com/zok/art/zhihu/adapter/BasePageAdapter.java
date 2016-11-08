@@ -105,6 +105,4 @@ public abstract class BasePageAdapter<T extends ITitleBean> extends PagerAdapter
      * @param data     data of item view.
      */
     protected abstract void fillData(View itemView, T data);
-
-
 }

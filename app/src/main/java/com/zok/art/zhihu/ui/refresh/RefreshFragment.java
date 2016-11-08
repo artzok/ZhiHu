@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.zok.art.zhihu.R;
-import com.zok.art.zhihu.adapter.NewsListAdapter;
+import com.zok.art.zhihu.adapter.RefreshListAdapter;
 import com.zok.art.zhihu.base.BaseApplication;
 import com.zok.art.zhihu.base.BaseFragment;
 import com.zok.art.zhihu.bean.StoryListItemBean;
@@ -35,7 +35,7 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
     protected ListView mNewsListView;
 
     // adapter
-    private NewsListAdapter mNewsAdapter;
+    private RefreshListAdapter mNewsAdapter;
 
     @Override
     protected int getLayoutResId() {
@@ -59,7 +59,7 @@ public abstract class RefreshFragment<M, P extends RefreshContract.Presenter>
         }
 
         // last news item adapter
-        mNewsAdapter = new NewsListAdapter(getActivity());
+        mNewsAdapter = new RefreshListAdapter(getActivity());
         mNewsListView.setAdapter(mNewsAdapter);
         mNewsListView.setOnScrollListener(this);
         mNewsListView.setOnItemClickListener(this);

@@ -4,22 +4,22 @@
                 android:layout_height="match_parent">
 
     <ImageView
-        android:src="@drawable/default_splash"
-        android:contentDescription="@string/image_description"
         android:id="@+id/iv_splash_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        android:contentDescription="@string/image_description"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_splash"/>
 
 
     <ImageView
-        android:contentDescription="@string/image_description"
         android:id="@+id/iv_splash_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="70dp"
+        android:contentDescription="@string/image_description"
         android:src="@mipmap/splash_logo"/>
 
     <TextView
@@ -28,7 +28,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dp"
+        android:layout_margin="10dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
         android:textColor="#ffffff"
         android:textSize="14sp"/>
 </RelativeLayout>

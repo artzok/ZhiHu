@@ -2,24 +2,16 @@
     <string name="app_name">知乎</string>
     <string name="open_drawer_desc"/>
     <string name="close_drawer_desc"/>
+
     <string name="login_tip">请登录</string>
 
     <string name="load_failed">加载失败</string>
-    <string-array name="basic_permissions">
-        <item>android.permission.ACCESS_NETWORK_STATE</item>
-        <item>android.permission.READ_PHONE_STATE</item>
-        <item>android.permission.WRITE_EXTERNAL_STORAGE</item>
-    </string-array>
-    <string-array name="main_permissions">
-        <item>android.permission.ACCESS_WIFI_STATE</item>
-        <item>android.permission.ACCESS_NETWORK_STATE</item>
-    </string-array>
-
     <string name="image_description">这是一张图片</string>
+
+    <string name="action_messages">消息</string>
     <string name="action_write_comment">写评论</string>
     <string name="empty_description">空空如也\n赶紧去收藏吧</string>
 
-    <string name="menu_news">资讯</string>
     <string name="menu_home_tip">首页</string>
     <string name="menu_themes_tips">主题</string>
     <string name="menu_sections_tips">栏目</string>
@@ -30,5 +22,27 @@
     <string name="menu_day_tips">日景</string>
     <string name="menu_setting_tips">设置</string>
     <string name="menu_about_tips">关于</string>
-    <string name="action_messages">消息</string>
+
+    <string name="refresh_item_title">今日热点</string>
+    <string name="about">关于</string>
+    <string name="about_detail">本应阿卡大没事了马来上面打老师的马拉松的穆斯林阿曼达说了什么都睡啦没打算没看到撒满了的麻辣靠什么动力萨马德里卡洛斯</string>
+    <string name="sina_weibo">微信：@artzok</string>
+    <string name="visit_github_title">asdasadsd</string>
+    <string name="visit_github_detail">asdasd</string>
+    <string name="open_source_title">adskdal</string>
+    <string name="open_source_list">adasad</string>
+    <string name="version_info">版本:</string>
+
+    <string-array name="basic_permissions">
+        <item>android.permission.ACCESS_NETWORK_STATE</item>
+        <item>android.permission.READ_PHONE_STATE</item>
+        <item>android.permission.READ_EXTERNAL_STORAGE</item>
+        <item>android.permission.WRITE_EXTERNAL_STORAGE</item>
+    </string-array>
+
+    <string-array name="main_permissions">
+        <item>android.permission.ACCESS_WIFI_STATE</item>
+        <item>android.permission.ACCESS_NETWORK_STATE</item>
+    </string-array>
+
 </resources>

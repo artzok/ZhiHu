@@ -1,5 +1,7 @@
 package com.zok.art.zhihu.ui.section;
 
+import android.util.Log;
+
 import com.zok.art.zhihu.api.ApiService;
 import com.zok.art.zhihu.bean.SectionBean;
 import com.zok.art.zhihu.bean.SectionNewsBean;

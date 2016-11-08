@@ -82,6 +82,7 @@ public abstract class BaseFragment<T extends BaseFragmentContract.Presenter>
 
     @Override
     public void showError(String msg, Throwable e) {
+        e.printStackTrace();
         log.d(msg + ":" + e.getMessage());
         View view = getView();
         if(view != null)
@@ -92,6 +93,12 @@ public abstract class BaseFragment<T extends BaseFragmentContract.Presenter>
                         mPresenter.start();
                     }
                 }).show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateTitle(mPresenter.getTitle());
     }
 
     @Override
@@ -106,5 +113,11 @@ public abstract class BaseFragment<T extends BaseFragmentContract.Presenter>
     @Override
     public T getPresenter() {
         return mPresenter;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BaseApplication.sWatcher.watch(this);
     }
 }

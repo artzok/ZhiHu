@@ -7,14 +7,16 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Process;
-import android.support.annotation.RequiresApi;
+import android.text.TextUtils;
 import android.text.format.Formatter;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.HashMap;
@@ -34,6 +36,7 @@ public class AppUtil {
 
     /* global cache */
     private static Map<String, Object> sCacheMap;
+    private static File sPicassoCacheFile;
 
     public static void initGlobal(Context appCtx) {
         sContext = appCtx;
@@ -101,9 +104,8 @@ public class AppUtil {
         return getAppRes().getStringArray(arrId);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public static int getColor(int colId) {
-        return getAppRes().getColor(colId, getAppContext().getTheme());
+        return getAppRes().getColor(colId);
     }
 
     public static void safeHandle(Runnable runnable) {
@@ -156,7 +158,38 @@ public class AppUtil {
         return statusHeight;
     }
 
+
+    public static int getAppVersion(Context context) {
+        try {
+            PackageInfo pi = context.getPackageManager().getPackageInfo(
+                    context.getPackageName(), 0);
+            return pi.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
     public static File getCacheFile(String name) {
         return new File(getCacheDir(), name);
+    }
+
+    public static Intent createShareIntent(String shareTitle,
+                                           String detailTitle,
+                                           String msgText,
+                                           File img) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        if (img == null || TextUtils.isEmpty(img.getAbsolutePath())) {
+            intent.setType("text/plain");
+        } else {
+            Uri u = Uri.fromFile(img);
+            intent.putExtra(Intent.EXTRA_STREAM, u);
+            intent.setType("image/*");
+        }
+        Log.d("tag", detailTitle);
+        intent.putExtra(Intent.EXTRA_SUBJECT, detailTitle);
+        intent.putExtra(Intent.EXTRA_TEXT, msgText);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return Intent.createChooser(intent, shareTitle);
     }
 }

@@ -8,10 +8,10 @@ import android.view.ViewPropertyAnimator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.bean.CommentItemBean;
 import com.zok.art.zhihu.utils.DateUtil;
+import com.zok.art.zhihu.utils.ImageLoaderManager;
 
 import java.util.Locale;
 
@@ -22,14 +22,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * @author 赵坤
  * @email artzok@163.com
  */
-public class CommentListAdapter extends BaseListAdapter<CommentItemBean> implements Animator.AnimatorListener {
+public class CommentListAdapter extends BaseListAdapter<CommentItemBean>
+        implements Animator.AnimatorListener {
     public static final int ITEM_TYPE_LONG = 1;         // flag for long comment title
     public static final int ITEM_TYPE_SHORT = 2;        // flag for short comment title
+    public static final int ITEM_TYPE_COUNT = 3;
 
-    private int longCount;              // long comment count
-    private int shortCount;             // short comment count
-    private OtherViewHolder longHolder; // long comment holder
-    private OtherViewHolder shortHolder;// short comment holder
+    private int longCount;                                  // long comment count
+    private int shortCount;                                 // short comment count
+
+    private OtherViewHolder longHolder;                     // long comment holder
+    private OtherViewHolder shortHolder;                    // short comment holder
 
     private boolean isFinish;
 
@@ -61,7 +64,7 @@ public class CommentListAdapter extends BaseListAdapter<CommentItemBean> impleme
 
     @Override
     public int getViewTypeCount() {
-        return 3;
+        return ITEM_TYPE_COUNT;
     }
 
     @Override
@@ -70,7 +73,7 @@ public class CommentListAdapter extends BaseListAdapter<CommentItemBean> impleme
             return ITEM_TYPE_LONG;
         else if (position == longCount + 1)
             return ITEM_TYPE_SHORT;
-        return ITEM_TYPE_NORMAL;
+        return super.getItemViewType(position);
     }
 
     @Override
@@ -144,14 +147,18 @@ public class CommentListAdapter extends BaseListAdapter<CommentItemBean> impleme
         public void fillData(CommentItemBean data, int position) {
             // set name
             userName.setText(data.getAuthor());
+
             // set comment comment
             commentContent.setText(data.getContent());
+
             // set vote count
             voteCount.setText(String.valueOf(data.getLikes()));
+
             // set time of comment
             commentTime.setText(DateUtil.formatTime(data.getTime()));
+
             // load icon of user
-            Picasso.with(getContext()).load(data.getAvatar()).into(userIcon);
+            ImageLoaderManager.loadAvatarImage(getContext(), userIcon, data.getAuthor());
         }
     }
 

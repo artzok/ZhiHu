@@ -84,7 +84,6 @@ public class StoryListItemBean extends BasicStoryBean {
         StoryListItemBean that = (StoryListItemBean) o;
 
         return mImageUrls != null ? mImageUrls.equals(that.mImageUrls) : that.mImageUrls == null;
-
     }
 
     @Override

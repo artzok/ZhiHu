@@ -1,6 +1,7 @@
 package com.zok.art.zhihu.ui.refresh;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.api.ApiManager;
@@ -38,6 +39,7 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
     // latest data and list
     protected M mLatestData;
     private List<StoryListItemBean> mListNewsData;
+    private long mLastFirstId;
 
     // URL API Service
     private ApiService mApiService;
@@ -56,7 +58,8 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
 
     @Override
     public void start() {
-        mView.updateTitle(getTitle());
+//        mView.updateTitle(getTitle());
+        mDate = new Date();
         updateLatest();
     }
 
@@ -90,6 +93,8 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
                 .filter(new Func1<M, Boolean>() {
                     @Override
                     public Boolean call(M m) {
+                        if (m == null) return false;
+//                        if (getListBeans(m).size() <= 0) return false;
                         return mLatestData == null || !mLatestData.equals(m);
                     }
                 }).doOnNext(new Action1<M>() {
@@ -104,7 +109,10 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
                     public void call(M m) {
                         mLatestData = m;
                         mListNewsData = getListBeans(mLatestData);
-                        mListNewsData.add(0, getTitleItem());
+                        if (mListNewsData.size() != 0) {
+                            mLastFirstId = mListNewsData.get(0).getId();    // last new first id
+                            mListNewsData.add(0, getTitleItem());
+                        }
                         mView.updateBanner(mLatestData);
                         mView.updateNewsList(mListNewsData);
                     }
@@ -123,14 +131,17 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
     }
 
     private void LoadBeforeData() {
-        if(mDate == null) mDate = new Date();
         mDate = DateUtil.getBeforeDate(mDate);
-        Observable<StoriesBeforeBean> observable = getBeforeObservable(mApiService, mInitParams, mDate);
+        Observable<StoriesBeforeBean> observable =
+                getBeforeObservable(mApiService, mInitParams, mDate);
         mBeforeSubscribe = observable.subscribeOn(Schedulers.io())
                 .filter(new Func1<StoriesBeforeBean, Boolean>() {
                     @Override
-                    public Boolean call(StoriesBeforeBean storiesBeforeBean) {
-                        return storiesBeforeBean != null;
+                    public Boolean call(StoriesBeforeBean data) {
+                        if (data == null) return false;
+                        List<StoryListItemBean> stories = data.getListStories();
+                        if (stories == null || stories.size() <= 0) return false;
+                        return stories.get(0).getId() != mLastFirstId;
                     }
                 }).doOnNext(new Action1<StoriesBeforeBean>() {
                     @Override
@@ -157,7 +168,9 @@ public abstract class RefreshPresenter<M, V extends RefreshContract.View<M>, P>
     protected abstract Observable<M> getLatestObservable(ApiService apiService, P params);
 
     protected Observable<StoriesBeforeBean> getBeforeObservable(ApiService apiService, P params, Date date) {
-        return mApiService.getBeforeNews(DateUtil.formatDate(date, "yyyyMMdd"));
+        String yyyyMMdd = DateUtil.formatDate(date, "yyyyMMdd");
+        Log.d("tag", yyyyMMdd);
+        return mApiService.getBeforeNews(yyyyMMdd);
     }
 
 

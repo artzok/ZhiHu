@@ -2,9 +2,15 @@ package com.zok.art.zhihu.ui.detail;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,15 +18,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.zok.art.zhihu.R;
 import com.zok.art.zhihu.base.BaseActivity;
+import com.zok.art.zhihu.bean.BasicStoryBean;
+import com.zok.art.zhihu.bean.NewsDetailBean;
 import com.zok.art.zhihu.bean.NewsExtraBean;
 import com.zok.art.zhihu.ui.comment.CommentActivity;
+import com.zok.art.zhihu.utils.AppUtil;
+import com.zok.art.zhihu.utils.IOUti;
+import com.zok.art.zhihu.utils.ImageLoaderManager;
+import com.zok.art.zhihu.utils.StringUtil;
 import com.zok.art.zhihu.utils.ToastUtil;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -60,7 +78,6 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
 
     @BindView(R.id.menu_praise)             // 点赞
     protected ImageView mMenuPraise;
-
 
     @Override
     protected int getLayoutResId() {
@@ -151,33 +168,57 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
         overridePendingTransition(R.anim.trans_enter_anim, R.anim.trans_exit_anim);
     }
 
-    @OnClick({R.id.menu_share, R.id.menu_collect,
-            R.id.menu_comment, R.id.menu_praise})
+    @OnClick({R.id.menu_share, R.id.menu_collect, R.id.menu_comment, R.id.menu_praise})
     public void onActionMenuClick(View v) {
         switch (v.getId()) {
             case R.id.menu_share:
+                shareDetail();
                 break;
             case R.id.menu_collect:
-                mPresenter.setCollected(!mPresenter.isCollected());
-                if(v.isSelected()) {
-                    ToastUtil.show(this, "取消成功", R.drawable.collect);
-                } else {
-                    ToastUtil.show(this, "收藏成功", R.drawable.collected);
-                }
+                collectDetail(v);
                 break;
             case R.id.menu_comment:
                 goToCommentActivity();
                 break;
             case R.id.menu_praise:
-                mPresenter.setPraised(!mPresenter.isPraised());
-                if(v.isSelected()) {
-                    ToastUtil.show(this, "取消点赞", R.drawable.praise);
-                } else {
-                    ToastUtil.show(this, "点赞成功", R.drawable.praised);
-                }
+                praiseDetail(v);
+
                 break;
         }
         v.setSelected(!v.isSelected());
+    }
+
+
+    private void shareDetail() {
+        final String shareTitle = mPresenter.getStoryBean().getTitle();         // 分享窗口标题
+        final String detailTitle = mPresenter.getNewsDetail().getTitle();       // 文章标题
+        final String imageUrl = mPresenter.getNewsDetail().getLagerImageUrl();  // 图片URL
+        final String detailUrl = mPresenter.getNewsDetail().getShareUrl();      // 文章内容
+        ImageLoaderManager.saveShareImage(imageUrl, new ImageLoaderManager.SaveImageCallBack() {
+            @Override
+            public void callBack(File file) {
+                startActivity(AppUtil.createShareIntent(shareTitle, detailTitle, detailUrl, file));
+            }
+        });
+    }
+
+    private void collectDetail(View v) {
+        mPresenter.setCollected(!mPresenter.isCollected());
+        if (v.isSelected()) {
+            ToastUtil.show(this, "取消成功", R.drawable.collect);
+        } else {
+            ToastUtil.show(this, "收藏成功", R.drawable.collected);
+        }
+    }
+
+    private void praiseDetail(View v) {
+        // TODO: 2016/11/8 点赞
+        mPresenter.setPraised(!mPresenter.isPraised());
+        if (v.isSelected()) {
+            ToastUtil.show(this, "取消点赞", R.drawable.praise);
+        } else {
+            ToastUtil.show(this, "点赞成功", R.drawable.praised);
+        }
     }
 
     private void goToCommentActivity() {
@@ -201,8 +242,13 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
     }
 
     @Override
+    public void closeProgress() {
+        mLoadProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
     public void updateHeaderImage(String url) {
-        Picasso.with(this).load(url).into(mHeadImage);
+        ImageLoaderManager.loadHeaderImage(this, mHeadImage, url);
     }
 
     @Override
@@ -228,9 +274,15 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
 
     @Override
     protected void onDestroy() {
-        // webView maybe result in memory leak of the Detail Activity
-        mWebView.removeAllViews();
-        mWebView.destroy();
         super.onDestroy();
+        if (mWebView != null) {
+            mWebView.removeAllViews();
+            mWebView.destroy();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

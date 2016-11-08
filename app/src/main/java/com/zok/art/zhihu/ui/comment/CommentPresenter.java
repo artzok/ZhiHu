@@ -156,6 +156,11 @@ public class CommentPresenter implements CommentContract.Presenter {
         mView.closeProgressBar();
     }
 
+    // TODO: 2016/11/8 加载更多评论
+    // TODO: 2016/11/8   发表评论
+    // TODO: 2016/11/8 点赞评论
+    // TODO: 2016/11/8 取消评论
+
     private class CommentTransformer implements Observable.Transformer<CommentListBean, List<CommentItemBean>> {
         @Override
         public Observable<List<CommentItemBean>> call(Observable<CommentListBean> origin) {

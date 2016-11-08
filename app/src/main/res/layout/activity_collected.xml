@@ -5,18 +5,12 @@
               android:layout_height="match_parent"
               android:orientation="vertical">
 
-    <ImageView
-        android:contentDescription="@string/image_description"
-        android:id="@+id/status_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"/>
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
+        android:paddingTop="25dp"
         app:theme="@style/toolBarStyle"/>
 
     <FrameLayout
@@ -24,26 +18,26 @@
         android:layout_height="match_parent">
 
         <RelativeLayout
-            android:visibility="gone"
             android:id="@+id/empty_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:visibility="gone">
 
             <ImageView
-                android:contentDescription="@string/image_description"
                 android:id="@+id/empty_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
+                android:contentDescription="@string/image_description"
                 android:src="@drawable/comment_empty"
                 android:text="@string/image_description"/>
 
             <TextView
-                android:layout_margin="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/empty_image"
                 android:layout_centerHorizontal="true"
+                android:layout_margin="20dp"
                 android:gravity="center"
                 android:text="@string/empty_description"
                 android:textSize="20sp"/>

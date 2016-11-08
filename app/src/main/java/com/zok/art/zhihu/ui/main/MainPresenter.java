@@ -49,7 +49,7 @@ public class MainPresenter implements Presenter {
 
     @Override
     public void start() {
-
+        switchHome();
     }
 
     @Override
