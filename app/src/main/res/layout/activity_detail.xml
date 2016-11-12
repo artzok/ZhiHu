@@ -70,7 +70,7 @@
             </FrameLayout>
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/detail_toolbar"
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 app:layout_collapseMode="pin"
@@ -105,8 +105,8 @@
                 android:visibility="gone"/>
 
             <!--web view widget-->
-            <com.tencent.smtt.sdk.WebView
-                android:id="@+id/wv_news_detail"
+            <FrameLayout
+                android:id="@+id/wv_news_detail_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </LinearLayout>

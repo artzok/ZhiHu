@@ -12,4 +12,16 @@
     <color name="comment_divider_color">#aaa</color>
     <color name="light_grey">#D7D7D7</color>
     <color name="md_pink">#f744c4</color>
+
+    <!-- setting -->
+
+    <color name="tx_br_setting">#0F121D</color>
+    <color name="tx_setting">#FFFFFF</color>
+    <color name="rl_setting">#141827</color>
+    <color name="rl_setting_down">#575d74</color>
+    <color name="ck_setting">#314aec</color>
+    <color name="ck_back_setting">#ffffff</color>
+
+
+
 </resources>

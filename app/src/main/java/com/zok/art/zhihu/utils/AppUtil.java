@@ -186,7 +186,6 @@ public class AppUtil {
             intent.putExtra(Intent.EXTRA_STREAM, u);
             intent.setType("image/*");
         }
-        Log.d("tag", detailTitle);
         intent.putExtra(Intent.EXTRA_SUBJECT, detailTitle);
         intent.putExtra(Intent.EXTRA_TEXT, msgText);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -1,5 +1,6 @@
 package com.zok.art.zhihu.ui.main;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -11,12 +12,15 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.zok.art.zhihu.R;
@@ -25,12 +29,17 @@ import com.zok.art.zhihu.base.BaseFragment;
 import com.zok.art.zhihu.base.BaseFragmentContract;
 import com.zok.art.zhihu.bean.SectionBean;
 import com.zok.art.zhihu.bean.ThemeItemBean;
+import com.zok.art.zhihu.service.DownloadService;
 import com.zok.art.zhihu.ui.about.AboutActivity;
 import com.zok.art.zhihu.ui.collected.CollectedActivity;
 import com.zok.art.zhihu.ui.home.HomeFragment;
+import com.zok.art.zhihu.ui.login.LoginActivity;
+import com.zok.art.zhihu.ui.setting.SettingActivity;
 import com.zok.art.zhihu.utils.AppUtil;
 
 import butterknife.BindView;
+
+import static android.content.DialogInterface.OnClickListener;
 
 public class MainActivity extends BaseActivity<MainContract.Presenter>
         implements MainContract.View,
@@ -48,13 +57,12 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     @BindView(R.id.nav_menus)
     public NavigationView mNavigationView;
 
-    public ImageView mUserImage;        // TODO: 2016/11/8 登录功能
+    public ImageView mUserImage;
 
     public TextView mLoginTips;
 
     private FragmentManager mFragmentManager;
     private MenuItem mNightMenuItem;
-    private SwitchCompat mNightModeSwitch;
 
 
     @Override
@@ -84,7 +92,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         if (id == android.R.id.home) {
             mToggle.onOptionsItemSelected(item);
         }
-        if(id == android.R.id.message) {
+        if (id == android.R.id.message) {
             // TODO: 2016/11/8 消息推送功能
         }
         return true;
@@ -108,8 +116,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
 
     private void initDecorate() {
         // 设置ActionBar
-        mToolbar.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(mToolbar);
+        setToolBar(mToolbar, " ", false);
 
         // toggle与DrawerLayout关联
         ActionBar actionBar = getSupportActionBar();
@@ -125,17 +132,18 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         View view = mNavigationView.getHeaderView(0);
         mUserImage = (ImageView) view.findViewById(R.id.user_image);
         mLoginTips = (TextView) view.findViewById(R.id.login_tips);
+        mLoginTips.setOnClickListener(this);
 
         // 导航监听
         mNavigationView.setNavigationItemSelectedListener(this);
 
         // 夜景模式菜单
         mNightMenuItem = mNavigationView.getMenu().findItem(R.id.nav_night);
-        mNightModeSwitch = (SwitchCompat) mNightMenuItem.getActionView();
-        mNightModeSwitch.setOnClickListener(this);
+        SwitchCompat nightModeSwitch = (SwitchCompat) mNightMenuItem.getActionView();
+        nightModeSwitch.setOnClickListener(this);
         // 初始化菜单文字
         updateNightModeText();
-        mNightModeSwitch.setChecked(isNightMode());
+        nightModeSwitch.setChecked(isNightMode());
     }
 
     private void updateNightModeText() {
@@ -145,34 +153,49 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
 
     @Override
     public void onClick(View v) {
-        switchNightMode();
+        switch (v.getId()) {
+            case R.id.switch_mode:
+                switchNightMode();
+                break;
+            case R.id.login_tips:
+                goLoginActivity();
+                break;
+        }
+    }
+
+    private void goLoginActivity() {
+        Intent login = new Intent(this, LoginActivity.class);
+        startActivity(login);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.nav_home:
-                goHome();               // 进入主页列表
+            case R.id.nav_home:         // 进入主页列表
+                goHome();
                 break;
-            case R.id.nav_themes:
-                goThemes();             // 进入主题列表
+            case R.id.nav_themes:       // 进入主题列表
+                goThemes();
                 break;
-            case R.id.nav_sections:
-                goSections();           // 进入栏目列表
+            case R.id.nav_sections:     // 进入栏目列表
+                goSections();
                 break;
-            case R.id.nav_collected:
-                goCollectedActivity();  // 进入收藏页面
+            case R.id.nav_collected:    // 进入收藏页面
+                goCollectedActivity();
                 break;
-            case R.id.nav_setting:
-                // TODO: 2016/11/7 设置页面
+            case R.id.nav_setting:      // 进入设置页面
+                goSettingActivity();
                 break;
-            case R.id.nav_about:
-                // TODO: 2016/11/8 完善关于页面
-                goAboutActivity();      // 进入关于页面
+            case R.id.nav_about:        // 进入关于页面
+                goAboutActivity();
+                break;
+            case R.id.nav_download:     // 离线下载内容
+                downloadLatestNews();
                 break;
         }
         return true;
     }
+
 
     /*进入主页列表*/
     private void goHome() {
@@ -198,6 +221,24 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         startActivity(favorites);
     }
 
+    /*进入设置页面*/
+    private void goSettingActivity() {
+        // TODO: 2016/11/7 设置页面
+        Intent intent = new Intent(this, SettingActivity.class);
+        startActivity(intent);
+    }
+
+    /*进入关于页面*/
+    private void goAboutActivity() {
+        Intent aboutActivity = new Intent(this, AboutActivity.class);
+        startActivity(aboutActivity);
+    }
+    /*离线下载所有内容*/
+    private void downloadLatestNews() {
+        Intent download = new Intent(this, DownloadService.class);
+        startService(download);
+    }
+
     /*进入指定主题列表*/
     public void goTheme(ThemeItemBean bean) {
         mPresenter.switchTheme(bean);
@@ -207,12 +248,6 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     public void goSection(SectionBean bean) {
         closeDrawer();
         mPresenter.switchSection(bean);
-    }
-
-    /*进入关于页面*/
-    private void goAboutActivity() {
-        Intent aboutActivity = new Intent(this, AboutActivity.class);
-        startActivity(aboutActivity);
     }
 
     /*关闭侧边导航*/
@@ -282,7 +317,7 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
         // back to the home fragment or finish the activity
         Fragment forehand = getForehand();
         if (forehand == null || forehand.getClass() == HomeFragment.class) {
-            finish();
+            createExitDialog().show();
         } else {
             goHome();
         }
@@ -291,5 +326,26 @@ public class MainActivity extends BaseActivity<MainContract.Presenter>
     @Override
     public void updateTitle(String title) {
         mToolbar.setTitle(title);
+    }
+
+    private AlertDialog createExitDialog() {
+        TextView view = new TextView(this);
+        view.setText(R.string.exit_tips);
+        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                20, AppUtil.getDisplayMetrics());
+        view.setPadding(padding, padding, padding, padding);
+        view.setTextColor(AppUtil.getColor(R.color.itemFontColor));
+        view.setTextSize(16);
+        return new AlertDialog.Builder(this)
+                .setTitle(R.string.exit_title)
+                .setView(view)
+                .setNegativeButton("否", null)
+                .setPositiveButton("是",
+                        new OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        }).create();
     }
 }

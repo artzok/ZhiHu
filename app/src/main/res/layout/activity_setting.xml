@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/tx_br_setting"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:paddingTop="25dp"
+        app:theme="@style/toolBarStyle" />
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/setting_normal"
+                android:textColor="@color/tx_setting"
+                android:textSize="15dp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_setting_offline_download"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/setting_rl_cl"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/setting_offline_download"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_offline_download"
+                    android:textColor="@color/tx_setting"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/setting_offline_download"
+                    android:text="@string/setting_offline_download_msg"
+                    android:textColor="@color/tx_setting" />
+
+                <include
+                    android:id="@+id/setting_offline_download_sb"
+                    layout="@layout/setting_swbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#66CCFF" />
+
+            <RelativeLayout
+                android:id="@+id/rl_setting_no_image"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/setting_rl_cl"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/setting_no_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_no_image"
+                    android:textColor="@color/tx_setting"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/setting_no_image"
+                    android:text="@string/setting_no_image_msg"
+                    android:textColor="@color/tx_setting" />
+
+                <include
+                    android:id="@+id/setting_no_image_sb"
+                    layout="@layout/setting_swbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#66CCFF" />
+
+            <RelativeLayout
+                android:id="@+id/rl_setting_big_text"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/setting_rl_cl"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/setting_big_text"
+                    android:textColor="@color/tx_setting"
+                    android:textSize="20dp" />
+
+                <include
+                    android:id="@+id/setting_big_text_sb"
+                    layout="@layout/setting_swbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/setting_other"
+                android:textColor="@color/tx_setting"
+                android:textSize="15dp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_setting_propelling"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/setting_rl_cl"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/setting_propelling"
+                    android:textColor="@color/tx_setting"
+                    android:textSize="20dp" />
+
+                <include
+                    android:id="@+id/setting_propelling_sb"
+                    layout="@layout/setting_swbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#66CCFF" />
+
+            <RelativeLayout
+                android:id="@+id/rl_setting_share_weibo"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/setting_rl_cl"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/setting_share_weibo"
+                    android:textColor="@color/tx_setting"
+                    android:textSize="20dp" />
+
+                <include
+                    android:id="@+id/setting_share_weibo_sb"
+                    layout="@layout/setting_swbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#66CCFF" />
+
+
+            <RelativeLayout
+                android:id="@+id/rl_setting_clear_cache"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/setting_rl_cl"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/setting_clear_cache"
+                    android:textColor="@color/tx_setting"
+                    android:textSize="20dp" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:background="#66CCFF" />
+
+
+            <RelativeLayout
+                android:id="@+id/rl_setting_check_update"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/setting_rl_cl"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/setting_check_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/setting_check_update"
+                    android:textColor="@color/tx_setting"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/setting_check_update"
+                    android:text="@string/setting_check_update"
+                    android:textColor="@color/tx_setting" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/setting_feedback"
+                android:textColor="@color/tx_setting"
+                android:textSize="15dp" />
+
+            <RelativeLayout
+                android:id="@+id/rl_setting_feedback_msg"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/setting_rl_cl"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/setting_feedback_msg"
+                    android:textColor="@color/tx_setting"
+                    android:textSize="20dp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

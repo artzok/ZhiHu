@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_praise"
+        android:id="@+id/action_write_comment"
         android:orderInCategory="100"
         android:icon="@drawable/comment_write"
         android:title="@string/action_write_comment"

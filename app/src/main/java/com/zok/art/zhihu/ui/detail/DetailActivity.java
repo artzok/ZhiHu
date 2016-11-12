@@ -2,46 +2,44 @@ package com.zok.art.zhihu.ui.detail;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.net.Uri;
-import android.os.Environment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.zok.art.zhihu.R;
+import com.zok.art.zhihu.api.ApiManager;
 import com.zok.art.zhihu.base.BaseActivity;
-import com.zok.art.zhihu.bean.BasicStoryBean;
-import com.zok.art.zhihu.bean.NewsDetailBean;
 import com.zok.art.zhihu.bean.NewsExtraBean;
+import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.ui.comment.CommentActivity;
 import com.zok.art.zhihu.utils.AppUtil;
-import com.zok.art.zhihu.utils.IOUti;
 import com.zok.art.zhihu.utils.ImageLoaderManager;
-import com.zok.art.zhihu.utils.StringUtil;
+import com.zok.art.zhihu.utils.NetWorkUtil;
+import com.zok.art.zhihu.utils.SPUtil;
 import com.zok.art.zhihu.utils.ToastUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
+import static com.tencent.smtt.sdk.WebSettings.*;
 
 /**
  * @author 赵坤
@@ -49,10 +47,12 @@ import butterknife.OnClick;
  */
 public class DetailActivity extends BaseActivity<DetailContract.Presenter>
         implements DetailContract.View {
-    @BindView(R.id.wv_news_detail)
+    @BindView(R.id.wv_news_detail_container)
+    public FrameLayout mWebViewContainer;   // webView容器
+
     protected WebView mWebView;             // WebView控件
 
-    @BindView(R.id.detail_toolbar)
+    @BindView(R.id.toolbar)
     protected Toolbar mToolbar;             // ToolBar控件
 
     @BindView(R.id.header_image)            // 主题插图
@@ -90,13 +90,6 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home)
-            onBackPressed();
-        return true;
-    }
-
-    @Override
     protected void requestPermissionSucceed() {
         initDecorate();
         configWebView();
@@ -105,13 +98,7 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
     }
 
     private void initDecorate() {
-        setSupportActionBar(mToolbar);
-        mToolbar.setTitleTextColor(Color.WHITE);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
-
+        setToolBar(mToolbar, " ", true);
         // 初始化ActionView
         mCommentCount.setText("...");
         mPraiseCount.setText("...");
@@ -122,11 +109,46 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
 
     @SuppressLint("SetJavaScriptEnabled")
     private void configWebView() {
+        // must is app context, otherwise will may leak memory
+        mWebView = new WebView(getApplicationContext());
+        mWebViewContainer.addView(mWebView);
         WebSettings settings = mWebView.getSettings();
+
+        // 设置无图模式
+        settings.setBlockNetworkImage(SPUtil.getBoolean(Constants.SETTING_NO_IMAGE));
+
+        // 设置离线设置
+        boolean offline = SPUtil.getBoolean(Constants.SETTING_AUTO_DOWNLOAD);
+        settings.setAppCacheEnabled(offline);
+        settings.setDomStorageEnabled(offline);
+        settings.setDatabaseEnabled(offline);
+
+        // 设置缓存模式
+        boolean netWorkAvailable = NetWorkUtil.isNetWorkAvailable(AppUtil.getAppContext());
+        settings.setCacheMode(netWorkAvailable ? WebSettings.LOAD_DEFAULT : WebSettings.LOAD_CACHE_ONLY);
+
+        // 设置大号字体
+        if (SPUtil.getBoolean(Constants.SETTING_BIG_FONT)) {
+            settings.setMinimumFontSize(25);
+        }
+
+        // 激活java script
         settings.setJavaScriptEnabled(true);
-        settings.setAllowContentAccess(true);
+
+        // 充满全屏
+        settings.setLoadWithOverviewMode(true);
+
+        // 适配移动端屏幕
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+
+        // 支持缩放
+        settings.setSupportZoom(true);
         settings.setBuiltInZoomControls(true);
-        settings.setLayoutAlgorithm(com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+
+        // 设置可以访问文件内容
+        settings.setAllowContentAccess(true);
+
+        // 设置夜景模式
         mWebView.setDayOrNight(!isNightMode());
     }
 
@@ -171,18 +193,17 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
     @OnClick({R.id.menu_share, R.id.menu_collect, R.id.menu_comment, R.id.menu_praise})
     public void onActionMenuClick(View v) {
         switch (v.getId()) {
-            case R.id.menu_share:
+            case R.id.menu_share:   // 分享
                 shareDetail();
                 break;
-            case R.id.menu_collect:
+            case R.id.menu_collect: // 收藏
                 collectDetail(v);
                 break;
-            case R.id.menu_comment:
+            case R.id.menu_comment:     // 评论
                 goToCommentActivity();
                 break;
-            case R.id.menu_praise:
+            case R.id.menu_praise:      // 点赞
                 praiseDetail(v);
-
                 break;
         }
         v.setSelected(!v.isSelected());
@@ -212,13 +233,13 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
     }
 
     private void praiseDetail(View v) {
-        // TODO: 2016/11/8 点赞
         mPresenter.setPraised(!mPresenter.isPraised());
         if (v.isSelected()) {
             ToastUtil.show(this, "取消点赞", R.drawable.praise);
         } else {
             ToastUtil.show(this, "点赞成功", R.drawable.praised);
         }
+        updateExtra(mPresenter.getNewsExtraInfo());
     }
 
     private void goToCommentActivity() {
@@ -269,20 +290,17 @@ public class DetailActivity extends BaseActivity<DetailContract.Presenter>
     @Override
     public void updateExtra(NewsExtraBean bean) {
         mCommentCount.setText(String.valueOf(bean.getComments()));
-        mPraiseCount.setText(String.valueOf(bean.getPopularity()));
+        int popularity = bean.getPopularity();
+        if (mPresenter.isPraised()) {
+            popularity += 1;
+        }
+        mPraiseCount.setText(String.valueOf(popularity));
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        if (mWebView != null) {
-            mWebView.removeAllViews();
+        if (mWebView != null)
             mWebView.destroy();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onDestroy();
     }
 }

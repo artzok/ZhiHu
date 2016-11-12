@@ -25,6 +25,8 @@ public interface CommentContract {
         void loadLongComment();
 
         void loadOrDeleteShortComment();
+
+        void loadMore(int position);
     }
 
 }

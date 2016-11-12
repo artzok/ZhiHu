@@ -14,8 +14,13 @@ import com.zok.art.zhihu.config.Constants;
 import com.zok.art.zhihu.db.RealmManager;
 import com.zok.art.zhihu.utils.AppUtil;
 import com.zok.art.zhihu.utils.HtmlUtil;
+import com.zok.art.zhihu.utils.NetWorkUtil;
+import com.zok.art.zhihu.utils.StringUtil;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import rx.Observable;
@@ -91,6 +96,19 @@ public class DetailPresenter implements DetailContract.Presenter {
                                             mView.showError(AppUtil.getString(R.string.load_failed), throwable);
                                         }
                                     });
+                        }
+                    }
+                }).doOnNext(new Action1<NewsDetailBean>() {
+                    @Override
+                    public void call(NewsDetailBean newsDetailBean) {
+                        if (!NetWorkUtil.isNetWorkAvailable(AppUtil.getAppContext())) {
+                            List<String> css = newsDetailBean.getCss();
+                            for (int i = 0; i < css.size(); i++) {
+                               File csFile = AppUtil.getCacheFile(StringUtil.MD5(css.get(i)));
+                                if(!csFile.exists()) return;
+                                String csUri = "file://"+csFile.getAbsolutePath();
+                                css.set(i, csUri);
+                            }
                         }
                     }
                 })

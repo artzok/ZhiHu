@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.zok.art.zhihu.R;
@@ -55,6 +56,7 @@ public class SplashPresenter implements Presenter {
         // get cache image author
         String author = SPUtil.getString(Constants.SPLASH_IMAGE_AUTHOR);
 
+        Log.d("author", author);
         // show splash image and author
         if (BitmapCacheUtils.checkCacheBitmap(Constants.SPLASH_IMAGE_NAME)) {
             Bitmap bitmap = BitmapCacheUtils.getCacheBitmap(Constants.SPLASH_IMAGE_NAME);
@@ -85,16 +87,16 @@ public class SplashPresenter implements Presenter {
     private void updateSplashCache() {
         if (!NetWorkUtil.isNetWorkAvailable(AppUtil.getAppContext())) return;
         int anInt = SPUtil.getInt(Constants.SPLASH_IMAGE_ORIGIN);
-//        switch (anInt) {
-//            case Constants.ZHIHU_SPLASH:
-//                mUpdateSubscribe = loadSplash(mService.getSplashImage(),
-//                        new ZhihuSplashAction());
-//                break;
-//            case Constants.BIND_SPLASH:
+        switch (anInt) {
+            case Constants.ZHIHU_SPLASH:
+                mUpdateSubscribe = loadSplash(mService.getSplashImage(),
+                        new ZhihuSplashAction());
+                break;
+            case Constants.BIND_SPLASH:
                 mUpdateSubscribe = loadSplash(mService.getRaw(ApiService.BIND_SPLASH_URL),
                         new BingSplashAction());
-//                break;
-//        }
+                break;
+        }
     }
 
     @SuppressWarnings("unchecked")

@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zok.art.zhihu.bean.ITitleBean;
+import com.zok.art.zhihu.utils.AppUtil;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +18,11 @@ import java.util.List;
  * @email artzok@163.com
  */
 public abstract class BasePageAdapter<T extends ITitleBean> extends PagerAdapter {
-    private Context mContext;
-    private List<View> views;
+    private WeakReference<Context> mContextRef;
     private List<T> data;
 
     BasePageAdapter(Context context) {
-        this.mContext = context;
+        this.mContextRef = new WeakReference<Context>(context);
     }
 
     @Override
@@ -42,10 +43,11 @@ public abstract class BasePageAdapter<T extends ITitleBean> extends PagerAdapter
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        if (views == null) return null; // maybe useless
-        View view = views.get(position);
-        container.addView(view);
-        return view;
+        int itemLayoutId = getItemLayoutId();
+            View itemView = LayoutInflater.from(getContext()).inflate(itemLayoutId, container, false);
+            fillData(itemView, data.get(position));
+            container.addView(itemView);
+        return itemView;
     }
 
     @Override
@@ -68,7 +70,8 @@ public abstract class BasePageAdapter<T extends ITitleBean> extends PagerAdapter
      * @return Context of a activity
      */
     Context getContext() {
-        return mContext;
+        Context context = mContextRef.get();
+        return context != null ? context : AppUtil.getAppContext();
     }
 
     /**
@@ -78,16 +81,16 @@ public abstract class BasePageAdapter<T extends ITitleBean> extends PagerAdapter
      */
     public void setDataAndRefresh(List<T> data) {
         this.data = data;
-        views = new ArrayList<>(data.size());
-        // builder data set of all item view
-        for (int i = 0; i < data.size(); i++) {
-            int itemLayoutId = getItemLayoutId();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            View itemView = inflater.inflate(itemLayoutId, null);
-            fillData(itemView, data.get(i));
-            // add item titleView
-            views.add(itemView);
-        }
+//        views = new ArrayList<>(data.size());
+//        // builder data set of all item view
+//        for (int i = 0; i < data.size(); i++) {
+//            int itemLayoutId = getItemLayoutId();
+//            LayoutInflater inflater = LayoutInflater.from(getContext());
+//            View itemView = inflater.inflate(itemLayoutId, null);
+//            fillData(itemView, data.get(i));
+//            // add item titleView
+//            views.add(itemView);
+//        }
         notifyDataSetChanged();
     }
 

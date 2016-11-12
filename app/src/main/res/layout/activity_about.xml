@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
             <include
                 layout="@layout/view_about_detail"
@@ -28,7 +28,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"/>
-
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
@@ -65,12 +64,13 @@
                     android:textSize="12sp"/>
 
                 <TextView
-                    android:id="@+id/weibo_link"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/weixin_qr"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/sina_weibo"
+                    android:text="@string/tencent_weixin"
                     android:textColor="@color/md_pink"
-                    android:textSize="14sp"/>
+                    android:textSize="12sp"/>
 
             </LinearLayout>
 
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="@string/visit_github_title"
-                android:textSize="14sp"/>
+                android:textSize="12sp"/>
 
             <TextView
                 android:id="@+id/github_link"
@@ -90,7 +90,7 @@
                 android:clickable="true"
                 android:padding="16dp"
                 android:text="@string/visit_github_detail"
-                android:textSize="14sp"/>
+                android:textSize="12sp"/>
 
 
             <TextView
@@ -111,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/open_source_list"
-                    android:textSize="14sp"/>
+                    android:textSize="12sp"/>
 
             </RelativeLayout>
 

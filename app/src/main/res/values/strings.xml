@@ -25,13 +25,46 @@
 
     <string name="refresh_item_title">今日热点</string>
     <string name="about">关于</string>
-    <string name="about_detail">本应阿卡大没事了马来上面打老师的马拉松的穆斯林阿曼达说了什么都睡啦没打算没看到撒满了的麻辣靠什么动力萨马德里卡洛斯</string>
-    <string name="sina_weibo">微信：@artzok</string>
-    <string name="visit_github_title">asdasadsd</string>
-    <string name="visit_github_detail">asdasd</string>
-    <string name="open_source_title">adskdal</string>
-    <string name="open_source_list">adasad</string>
+    <string name="about_detail">本应用属于一款阅读软件，主要为用户推送最新的热门文章，所有内容均不收取费！\n\n
+        文章主要来源于知乎日报网站，部分图片来自必应搜索(bing)首页，所有来源未经授权，如有侵权，请立即联系本作者删除！</string>
+    <string name="tencent_weixin">微信号：FegKuagXioZ(点击获取二维码)</string>
+    <string name="visit_github_title">项目地址</string>
+    <string name="visit_github_detail">GitHub地址:https://github.com/artzok/ZhiHu</string>
+    <string name="open_source_title">使用的第三方开源框架</string>
+    <string name="open_source_list">
+    appcompat-v7\n
+    design\n
+    recyclerview-v7\n
+    cardview-v7\n
+    rxjava\n
+    rxandroid\n
+    gson\
+    retrofit\n
+    converter-gson\n
+    adapter-rxjava\n
+    okhttp\n
+    logging-interceptor\n
+    picasso\n
+    dagger\n
+    dagger-compiler\n
+    butterknife\n
+    butterknife-compiler\n
+    circleimageview\n
+    autoviewpager\n
+    leakcanary-android\n
+    leakcanary-android-no-op\n
+    leakcanary-android-no-op\n
+    tbs webView\n
+    multidex\n
+    buglycrashreport\n
+    realm\n
+    </string>
     <string name="version_info">版本:</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    <string name="exit_tips">是否确认退出应用？</string>
+    <string name="exit_title">提示</string>
+    <string name="menu_download">离线下载所有内容</string>
+
 
     <string-array name="basic_permissions">
         <item>android.permission.ACCESS_NETWORK_STATE</item>
@@ -44,5 +77,23 @@
         <item>android.permission.ACCESS_WIFI_STATE</item>
         <item>android.permission.ACCESS_NETWORK_STATE</item>
     </string-array>
+
+    <!-- 设置页面 -->
+    <string name="setting_normal">常规</string>
+    <string name="setting_other">其他</string>
+    <string name="setting_feedback">反馈</string>
+
+    <string name="setting_offline_download">自动离线下载</string>
+    <string name="setting_offline_download_msg">仅Wi-Fi下可用,自动下载最新内容</string>
+    <string name="setting_no_image">无图模式</string>
+    <string name="setting_no_image_msg">2G/3G 网络下载不了图片</string>
+    <string name="setting_big_text">大字号</string>
+    <string name="setting_propelling">推送消息</string>
+    <string name="setting_share_weibo">点评分享到微博</string>
+    <string name="setting_clear_cache">清除缓存</string>
+    <string name="setting_check_update">检查更新</string>
+    <string name="setting_feedback_msg">意见反馈</string>
+    <string name="action_send_comment">发送评论</string>
+
 
 </resources>

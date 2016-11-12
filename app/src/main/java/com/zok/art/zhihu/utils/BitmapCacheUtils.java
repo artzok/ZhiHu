@@ -31,7 +31,7 @@ public class BitmapCacheUtils {
             e.printStackTrace();
             return false;
         } finally {
-            IOUti.close(out);
+            IOUtils.close(out);
         }
         return true;
     }

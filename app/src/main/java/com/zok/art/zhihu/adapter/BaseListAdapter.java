@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.zok.art.zhihu.utils.AppUtil;
 import com.zok.art.zhihu.utils.CastUtil;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -17,13 +19,13 @@ import butterknife.ButterKnife;
  * @email artzok@163.com
  */
 public abstract class BaseListAdapter<T> extends BaseAdapter {
-    static final int ITEM_TYPE_NORMAL = 0;       // Plain item flag
+    public static final int ITEM_TYPE_NORMAL = 0;       // Plain item flag
 
-    private Context mContext;
+    private WeakReference<Context> mContextRef;
     private List<T> data;
 
     BaseListAdapter(Context context) {
-        this.mContext = context;
+        this.mContextRef = new WeakReference<Context>(context);
     }
 
     @Override
@@ -52,7 +54,8 @@ public abstract class BaseListAdapter<T> extends BaseAdapter {
      * @return Context of a activity
      */
     Context getContext() {
-        return mContext;
+        Context context = mContextRef.get();
+        return context != null ? context : AppUtil.getAppContext();
     }
 
     /**

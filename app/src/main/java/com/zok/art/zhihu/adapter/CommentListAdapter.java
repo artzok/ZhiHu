@@ -26,6 +26,7 @@ public class CommentListAdapter extends BaseListAdapter<CommentItemBean>
         implements Animator.AnimatorListener {
     public static final int ITEM_TYPE_LONG = 1;         // flag for long comment title
     public static final int ITEM_TYPE_SHORT = 2;        // flag for short comment title
+
     public static final int ITEM_TYPE_COUNT = 3;
 
     private int longCount;                                  // long comment count

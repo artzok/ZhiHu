@@ -57,9 +57,19 @@ public interface ApiService {
     Observable<CommentListBean> getLongComment(@Path("id") long id);
     //http://news-at.zhihu.com/api/4/story/4232852/long-comments
 
+    /*获得指定id的长评论*/
+    @GET("4/story/{id}/long-comments/{userId}")
+    Observable<CommentListBean> getLongCommentMore(@Path("id") long id, @Path("userId") long userId);
+    //http://news-at.zhihu.com/api/4/story/4232852/long-comments
+
     /*获得指定id的短评*/
     @GET("4/story/{id}/short-comments")
     Observable<CommentListBean> getShortComment(@Path("id") long id);
+    //http://news-at.zhihu.com/api/4/story/4232852/short-comments
+
+    /*获得指定id的短评*/
+    @GET("4/story/{id}/short-comments/before/{userId}")
+    Observable<CommentListBean> getShortCommentMore(@Path("id") long id, @Path("userId") long userId);
     //http://news-at.zhihu.com/api/4/story/4232852/short-comments
 
     /*获得主题列表*/

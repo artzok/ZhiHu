@@ -2,16 +2,18 @@ package com.zok.art.zhihu.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.zok.art.zhihu.R;
+import com.zok.art.zhihu.config.Constants;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,11 +31,11 @@ public class ImageLoaderManager {
     private static final int EMPTY_NONE = -3;
 
     public static void loadListItemImage(Context context, ImageView imageView, String url) {
-        loadImage(context, imageView, url, EMPTY_GONE, R.drawable.menu_zhihu, R.drawable.comment_empty);
+        loadImage(context, imageView, url, EMPTY_GONE, R.drawable.ic_logo, R.drawable.ic_logo);
     }
 
     public static void loadCardItemImage(Context context, ImageView imageView, String url) {
-        loadImage(context, imageView, url, R.drawable.comment_empty, R.drawable.comment_empty, R.drawable.comment_empty);
+        loadImage(context, imageView, url, R.drawable.ic_logo, R.drawable.default_splash, R.drawable.ic_logo);
     }
 
     public static void loadBannerItemImage(Context context, ImageView imageView, String url) {
@@ -45,7 +47,7 @@ public class ImageLoaderManager {
     }
 
     public static void loadHeaderImage(Context context, ImageView imageView, String url) {
-        loadImage(context, imageView, url, EMPTY_NONE, R.drawable.comment_empty, R.drawable.comment_empty);
+        loadImage(context, imageView, url, EMPTY_NONE, R.drawable.default_splash, R.drawable.ic_logo);
     }
 
 
@@ -79,6 +81,14 @@ public class ImageLoaderManager {
             return;
         }
 
+        if (SPUtil.getBoolean(Constants.SETTING_NO_IMAGE)) {
+            imageView.setImageResource(loading);
+            imageView.setColorFilter(Color.LTGRAY, PorterDuff.Mode.MULTIPLY);
+            return;
+        } else {
+            imageView.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+        }
+
         Picasso.with(context).load(url)
                 .placeholder(loading)
                 .error(error)
@@ -88,7 +98,7 @@ public class ImageLoaderManager {
     public static void saveShareImage(String url, final SaveImageCallBack callBack) {
         final File file = new File(AppUtil.getAppContext().getExternalCacheDir(),
                 StringUtil.MD5(url) + ".jpeg");
-        if(file.exists()) {
+        if (file.exists()) {
             callBack.callBack(file);
             return;
         }
@@ -102,7 +112,7 @@ public class ImageLoaderManager {
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } finally {
-                    IOUti.close(os);
+                    IOUtils.close(os);
                 }
                 AppUtil.safeHandle(new Runnable() {
                     @Override

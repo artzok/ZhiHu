@@ -24,6 +24,7 @@ import static android.support.v7.app.AppCompatDelegate.setDefaultNightMode;
  */
 public class BaseApplication extends Application {
     public static RefWatcher sWatcher;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -43,13 +44,8 @@ public class BaseApplication extends Application {
         // init crash
         initCrashHandler();
 
-        // init theme
-        iniTheme();
-    }
-
-    private void iniTheme() {
-        boolean isNight = SPUtil.getBoolean(Constants.DAY_NIGHT_MODE);
-        setDefaultNightMode(isNight ? MODE_NIGHT_YES : MODE_NIGHT_NO);
+        // init mode
+        initMode();
     }
 
     private void initLeakCanary() {
@@ -59,25 +55,37 @@ public class BaseApplication extends Application {
         sWatcher = LeakCanary.install(this);
     }
 
+    private void initTbs() {
+        final QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
+            public void onViewInitFinished(boolean arg0) {
+            }
+
+            public void onCoreInitFinished() {
+            }
+        };
+        QbSdk.setTbsListener(new TbsListener() {
+            public void onDownloadFinish(int i) {
+            }
+
+            public void onInstallFinish(int i) {
+            }
+
+            public void onDownloadProgress(int i) {
+            }
+        });
+        QbSdk.initX5Environment(getApplicationContext(), cb);
+        QbSdk.preInit(getApplicationContext());
+    }
+
     private void initCrashHandler() {
-        // CrashReport.initCrashReport(getApplicationContext(), "900058880", true);
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(this);
         strategy.setAppVersion(String.valueOf(AppUtil.getAppVersion(this)));
         CrashReport.initCrashReport(getApplicationContext(), "900058880", true, strategy);
     }
 
-    private void initTbs() {
-        final QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
-            public void onViewInitFinished(boolean arg0) {}
-            public void onCoreInitFinished() {}
-        };
-        QbSdk.setTbsListener(new TbsListener() {
-            public void onDownloadFinish(int i) {}
-            public void onInstallFinish(int i) {}
-            public void onDownloadProgress(int i) {}
-        });
-        QbSdk.initX5Environment(getApplicationContext(),  cb);
-        QbSdk.preInit(getApplicationContext());
+    private void initMode() {
+        boolean isNight = SPUtil.getBoolean(Constants.DAY_NIGHT_MODE);
+        setDefaultNightMode(isNight ? MODE_NIGHT_YES : MODE_NIGHT_NO);
     }
 
     @Override

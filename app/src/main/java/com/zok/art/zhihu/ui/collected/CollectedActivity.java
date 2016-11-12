@@ -50,13 +50,7 @@ public class CollectedActivity extends BaseActivity
     @Override
     protected void requestPermissionSucceed() {
         // set action bar
-        mToolbar.setTitle("收藏");
-        mToolbar.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(mToolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        setToolBar(mToolbar, AppUtil.getString(R.string.menu_collected_tips), true);
 
         // set click event
         mCollectsView.setOnItemClickListener(this);
@@ -84,16 +78,6 @@ public class CollectedActivity extends BaseActivity
         if (mBeen == null || mBeen.size() == 0) {
             mEmptyView.setVisibility(View.VISIBLE);
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-        }
-        return true;
     }
 
     @Override

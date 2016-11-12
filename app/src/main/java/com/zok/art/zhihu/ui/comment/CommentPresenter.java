@@ -28,11 +28,14 @@ import rx.schedulers.Schedulers;
  * @email artzok@163.com
  */
 public class CommentPresenter implements CommentContract.Presenter {
-    private static final int LONG_TYPE = 1;
-    private static final int SHORT_TYPE = 2;
+    private static final int LONG_TYPE_INIT = 1;
+    private static final int SHORT_TYPE_INIT = 2;
+    private static final int LONG_TYPE_MORE = 3;
+    private static final int SHORT_TYPE_MORE = 4;
 
     // 新闻ID
     private long mNewsId;
+
     // 评论等额外信息
     private NewsExtraBean mNewsExtraInfo;
 
@@ -49,6 +52,11 @@ public class CommentPresenter implements CommentContract.Presenter {
     // 相关订阅者
     private Subscription mLongSubscribe;
     private Subscription mShortSubscribe;
+    private Subscription mLongSubscribeMore;
+    private Subscription mShortSubscribeMore;
+    private int longCount;      // 长评数量
+    private int shortCount;     // 短评数量
+    private Action1<Throwable> mOnError;// 错误处理对象
 
     public CommentPresenter(Intent intent) {
         mNewsId = intent.getLongExtra(CommentActivity.EXTRA_NEWS_ID, 0);
@@ -59,19 +67,29 @@ public class CommentPresenter implements CommentContract.Presenter {
     @Override
     public void attachView(CommentContract.View view) {
         mView = view;
-        int comments = mNewsExtraInfo.getComments();
-        mView.updateTitle(String.format(Locale.CHINA, "%d条点评", comments));
+        mOnError = new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                mView.showError(AppUtil.getString(R.string.load_failed), throwable);
+                mView.closeProgressBar();
+            }
+        };
     }
 
     @Override
     public void detachView() {
         RxJavaUtils.releaseSubscribe(mLongSubscribe);
+        RxJavaUtils.releaseSubscribe(mLongSubscribeMore);
+
         RxJavaUtils.releaseSubscribe(mShortSubscribe);
+        RxJavaUtils.releaseSubscribe(mShortSubscribeMore);
         mView = null;
     }
 
     @Override
     public void start() {
+        int comments = mNewsExtraInfo.getComments();
+        mView.updateTitle(String.format(Locale.CHINA, "%d条点评", comments));
         loadLongComment();
     }
 
@@ -79,25 +97,18 @@ public class CommentPresenter implements CommentContract.Presenter {
     public void loadLongComment() {
         // 避免没有意义的请求
         if (mNewsExtraInfo.getLong_comments() == 0) {
-            concat(LONG_TYPE, null);
+            concat(LONG_TYPE_INIT, null);
             return;
         }
-
         // 请求长评
         Observable<CommentListBean> longComment = mApiService.getLongComment(mNewsId);
         mLongSubscribe = longComment.compose(new CommentTransformer())
                 .subscribe(new Action1<List<CommentItemBean>>() {
                     @Override
                     public void call(List<CommentItemBean> commentBeen) {
-                        concat(LONG_TYPE, commentBeen);
+                        concat(LONG_TYPE_INIT, commentBeen);
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mView.showError(AppUtil.getString(R.string.load_failed), throwable);
-                        mView.closeProgressBar();
-                    }
-                });
+                }, mOnError);
     }
 
     @Override
@@ -112,7 +123,6 @@ public class CommentPresenter implements CommentContract.Presenter {
 
         // 避免没有意义的请求
         if (mNewsExtraInfo.getShort_comments() == 0) {
-//            concat(SHORT_TYPE, null);
             return;
         }
 
@@ -122,30 +132,67 @@ public class CommentPresenter implements CommentContract.Presenter {
                 .subscribe(new Action1<List<CommentItemBean>>() {
                     @Override
                     public void call(List<CommentItemBean> commentBeen) {
-                        concat(SHORT_TYPE, commentBeen);
+                        concat(SHORT_TYPE_INIT, commentBeen);
                         hasLoad = true;
                     }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        mView.showError(AppUtil.getString(R.string.load_failed), throwable);
-                        mView.closeProgressBar();
-                    }
-                });
+                }, mOnError);
+    }
+
+    @Override
+    public void loadMore(int position) {
+        if (longCount > 0 && longCount < mNewsExtraInfo.getLong_comments() && position >= longCount) {
+            if(mLongSubscribeMore != null && !mLongSubscribeMore.isUnsubscribed()) return;
+            // load more long comment
+            long lastId = mComments.get(longCount).getTime();
+            Observable<CommentListBean> longCommentMore = mApiService.getLongCommentMore(mNewsId, lastId);
+            mLongSubscribeMore = longCommentMore.compose(new CommentTransformer())
+                    .subscribe(new Action1<List<CommentItemBean>>() {
+                        @Override
+                        public void call(List<CommentItemBean> commentBeen) {
+                            concat(LONG_TYPE_MORE, commentBeen);
+                        }
+                    }, mOnError);
+        } else if (shortCount > 0 && shortCount < mNewsExtraInfo.getShort_comments()
+                && position >= longCount + shortCount + 1) {
+            if(mShortSubscribeMore != null && !mShortSubscribeMore.isUnsubscribed()) return;
+            // load more short comment
+            long lastId = mComments.get(mComments.size() - 1).getTime();
+            Observable<CommentListBean> shortCommentMore = mApiService.getShortCommentMore(mNewsId, lastId);
+            mShortSubscribeMore = shortCommentMore.compose(new CommentTransformer())
+                    .subscribe(new Action1<List<CommentItemBean>>() {
+                        @Override
+                        public void call(List<CommentItemBean> commentBeen) {
+                            concat(SHORT_TYPE_MORE, commentBeen);
+                        }
+                    }, mOnError);
+        }
     }
 
     private void concat(int commentType, List<CommentItemBean> comments) {
-        if (commentType == LONG_TYPE) {
+        if (commentType == LONG_TYPE_INIT) {
             if (comments != null) {
                 mComments = comments;
+                longCount = comments.size();
             } else {
                 mComments = new ArrayList<>();
             }
             mComments.add(0, new CommentItemBean());
             mComments.add(new CommentItemBean());
-        } else if (commentType == SHORT_TYPE) {
-            if (comments != null)
+        } else if (commentType == SHORT_TYPE_INIT) {
+            if (comments != null) {
                 mComments.addAll(comments);
+                shortCount = comments.size();
+            }
+        } else if (commentType == LONG_TYPE_MORE) {
+            if (comments != null) {
+                mComments.addAll(longCount + 1, comments);
+                longCount += comments.size();
+            }
+        } else if (commentType == SHORT_TYPE_MORE) {
+            if (comments != null) {
+                mComments.addAll(comments);
+                shortCount += comments.size();
+            }
         }
 
         // 更新评论数量
@@ -155,11 +202,6 @@ public class CommentPresenter implements CommentContract.Presenter {
         // 关闭进度条
         mView.closeProgressBar();
     }
-
-    // TODO: 2016/11/8 加载更多评论
-    // TODO: 2016/11/8   发表评论
-    // TODO: 2016/11/8 点赞评论
-    // TODO: 2016/11/8 取消评论
 
     private class CommentTransformer implements Observable.Transformer<CommentListBean, List<CommentItemBean>> {
         @Override

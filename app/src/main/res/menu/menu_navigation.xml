@@ -26,9 +26,10 @@
                 android:title="@string/menu_collected_tips"/>
             <item
                 android:id="@+id/nav_night"
-                app:actionLayout="@layout/night_mode_switch"
                 android:icon="@drawable/menu_night"
-                android:title="@string/menu_night_tips"/>
+                android:title="@string/menu_night_tips"
+                app:actionLayout="@layout/night_mode_switch"/>
+
             <item
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/menu_setting"
@@ -37,6 +38,10 @@
                 android:id="@+id/nav_about"
                 android:icon="@drawable/menu_about"
                 android:title="@string/menu_about_tips"/>
+            <item
+                android:id="@+id/nav_download"
+                android:icon="@drawable/menu_download"
+                android:title="@string/menu_download"/>
         </menu>
     </item>
 </menu>

@@ -71,11 +71,12 @@ dependencies {
     // leak canary
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     // tabs x5
     compile files('libs/tbs2.4.jar')
     // multi dex
     compile 'com.android.support:multidex:1.0.0'
     // bugly crash
     compile 'com.tencent.bugly:crashreport:latest.release'
+    // switchbutton
+    compile 'com.kyleduo.switchbutton:library:1.4.4'
 }

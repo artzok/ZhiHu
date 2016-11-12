@@ -1,6 +1,7 @@
 package com.zok.art.zhihu.base;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.zok.art.zhihu.R;
@@ -220,11 +222,11 @@ public abstract class BaseActivity<T extends BasePresenter>
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
     }
 
@@ -234,11 +236,11 @@ public abstract class BaseActivity<T extends BasePresenter>
         log.d(msg + ":" + e.getMessage());
         Snackbar.make(mView, msg, 2000).setAction("重试",
                 new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPresenter.start();
-            }
-        }).show();
+                    @Override
+                    public void onClick(View v) {
+                        mPresenter.start();
+                    }
+                }).show();
     }
 
     @Override
@@ -248,5 +250,20 @@ public abstract class BaseActivity<T extends BasePresenter>
             mPresenter.detachView();
         mUnBinder.unbind();
         BaseApplication.sWatcher.watch(this);
+    }
+
+    protected void setToolBar(Toolbar toolBar, String title, boolean finishNav) {
+        toolBar.setTitle(title);
+        setSupportActionBar(toolBar);
+        toolBar.setTitleTextColor(Color.WHITE);
+        if (finishNav) {
+            toolBar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 }

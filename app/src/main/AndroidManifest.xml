@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.READ_LOGS"/>
@@ -32,14 +32,14 @@
             </intent-filter>
         </activity>
 
-        <!-- 主界面：管理四大Fragment的容器 -->
+        <!-- 主界面 -->
         <activity
             android:name=".ui.main.MainActivity"
             android:configChanges="uiMode"
             android:launchMode="singleTask">
         </activity>
 
-        <!-- WebView界面：浏览每个故事 -->
+        <!-- WebView界面 -->
         <activity
             android:name=".ui.detail.DetailActivity"
             android:launchMode="singleTop"/>
@@ -55,6 +55,24 @@
             android:launchMode="singleTop"/>
         <activity android:name=".ui.about.AboutActivity">
         </activity>
+
+        <!--设置页面-->
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:launchMode="singleTop"/>
+
+        <!--写评论页面-->
+        <activity
+            android:name=".ui.write_comment.WriteCommentActivity"
+            android:launchMode="singleTop"/>
+
+        <!--登录页面-->
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:launchMode="singleTop"/>
+
+        <!--下载服务-->
+        <service android:name=".service.DownloadService"/>
     </application>
 
 </manifest>

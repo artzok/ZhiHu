@@ -1,10 +1,13 @@
 package com.zok.art.zhihu.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * @author 赵坤
  * @email artzok@163.com
  */
-public class CommentItemBean {
+public class CommentItemBean implements Parcelable {
     private String author;
     private String content;
     private String avatar;
@@ -59,4 +62,43 @@ public class CommentItemBean {
     public void setLikes(int likes) {
         this.likes = likes;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.author);
+        dest.writeString(this.content);
+        dest.writeString(this.avatar);
+        dest.writeInt(this.time);
+        dest.writeInt(this.id);
+        dest.writeInt(this.likes);
+    }
+
+    public CommentItemBean() {
+    }
+
+    protected CommentItemBean(Parcel in) {
+        this.author = in.readString();
+        this.content = in.readString();
+        this.avatar = in.readString();
+        this.time = in.readInt();
+        this.id = in.readInt();
+        this.likes = in.readInt();
+    }
+
+    public static final Parcelable.Creator<CommentItemBean> CREATOR = new Parcelable.Creator<CommentItemBean>() {
+        @Override
+        public CommentItemBean createFromParcel(Parcel source) {
+            return new CommentItemBean(source);
+        }
+
+        @Override
+        public CommentItemBean[] newArray(int size) {
+            return new CommentItemBean[size];
+        }
+    };
 }

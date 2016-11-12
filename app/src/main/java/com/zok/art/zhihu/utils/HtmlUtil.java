@@ -32,12 +32,12 @@ public class HtmlUtil {
 
 
     private static String createCssTag(List<String> urls) {
-        if(urls == null || urls.size() == 0) return " ";
+        if (urls == null || urls.size() == 0) return " ";
         final StringBuilder sb = new StringBuilder();
         for (String url : urls) {
             sb.append(createCssTag(url));
         }
-      return sb.toString();
+        return sb.toString();
     }
 
     private static String createJsTag(String url) {
@@ -46,7 +46,7 @@ public class HtmlUtil {
 
 
     private static String createJsTag(List<String> urls) {
-        if(urls == null || urls.size() == 0) return " ";
+        if (urls == null || urls.size() == 0) return " ";
         final StringBuilder sb = new StringBuilder();
         for (String url : urls) {
             sb.append(createJsTag(url));
@@ -55,8 +55,8 @@ public class HtmlUtil {
     }
 
     public static String createHtmlData(String html, List<String> cssList, List<String> jsList) {
-        final String css = HtmlUtil.createCssTag(cssList);
-        final String js = HtmlUtil.createJsTag(jsList);
+        String css = HtmlUtil.createCssTag(cssList);
+        String js = HtmlUtil.createJsTag(jsList);
         return css.concat(HIDE_HEADER_STYLE).concat(html).concat(js);
     }
 }
